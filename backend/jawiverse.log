@@ -1,0 +1,26 @@
+2025-09-29 20:54:10,501 INFO jawiverse-api Request: POST http://127.0.0.1:8000/transliterate
+2025-09-29 20:54:10,503 INFO jawiverse-api Transliteration requested: model=classical2rumi, text=ڤڠاجارن
+2025-09-29 20:54:10,503 INFO jawiverse-api Transliteration result: pngajarn
+2025-09-29 20:54:10,505 INFO jawiverse-api Response status: 200
+2025-09-29 20:54:52,750 INFO jawiverse-api Request: POST http://127.0.0.1:8000/transliterate
+2025-09-29 20:54:52,752 INFO jawiverse-api Response status: 422
+2025-09-29 20:55:09,533 INFO jawiverse-api Request: POST http://127.0.0.1:8000/transliterate
+2025-09-29 20:55:09,538 INFO jawiverse-api Transliteration requested: model=classical2rumi, text=ڤڠاجارن
+2025-09-29 20:55:09,538 INFO jawiverse-api Transliteration result: pngajarn
+2025-09-29 20:55:09,538 INFO jawiverse-api Response status: 200
+2025-09-29 20:55:35,960 INFO jawiverse-api Request: POST http://127.0.0.1:8000/transliterate
+2025-09-29 20:55:35,961 INFO jawiverse-api Transliteration requested: model=modern2rumi, text=ڤمبچأن
+2025-09-29 20:55:35,961 INFO jawiverse-api Transliteration result: pmbcأn
+2025-09-29 20:55:35,961 INFO jawiverse-api Response status: 200
+2025-09-29 20:56:15,195 INFO jawiverse-api Request: POST http://127.0.0.1:8000/transliterate
+2025-09-29 20:56:15,196 INFO jawiverse-api Transliteration requested: model=modern2rumi, text=ڤمبچأن
+2025-09-29 20:56:15,196 INFO jawiverse-api Transliteration result: pmbcأn
+2025-09-29 20:56:15,197 INFO jawiverse-api Response status: 200
+2025-09-29 20:56:39,086 INFO jawiverse-api Request: POST http://127.0.0.1:8000/transliterate
+2025-09-29 20:56:39,087 INFO jawiverse-api Transliteration requested: model=rumi2classical, text=pengajaran
+2025-09-29 20:56:39,087 INFO jawiverse-api Transliteration result: ڤeڠاجاران
+2025-09-29 20:56:39,087 INFO jawiverse-api Response status: 200
+2025-09-29 20:56:59,566 INFO jawiverse-api Request: POST http://127.0.0.1:8000/transliterate
+2025-09-29 20:56:59,567 INFO jawiverse-api Transliteration requested: model=rumi2modern, text=pembacaan
+2025-09-29 20:56:59,567 INFO jawiverse-api Transliteration result: ڤeمباچاان
+2025-09-29 20:56:59,568 INFO jawiverse-api Response status: 200
