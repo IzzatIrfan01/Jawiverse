@@ -24,3 +24,31 @@
 2025-09-29 20:56:59,567 INFO jawiverse-api Transliteration requested: model=rumi2modern, text=pembacaan
 2025-09-29 20:56:59,567 INFO jawiverse-api Transliteration result: ڤeمباچاان
 2025-09-29 20:56:59,568 INFO jawiverse-api Response status: 200
+2025-10-05 14:41:25,477 INFO jawiverse-api Request: GET http://127.0.0.1:8000/
+2025-10-05 14:41:25,480 INFO jawiverse-api Response status: 404
+2025-10-05 14:41:25,634 INFO jawiverse-api Request: GET http://127.0.0.1:8000/favicon.ico
+2025-10-05 14:41:25,635 INFO jawiverse-api Response status: 404
+2025-10-05 14:41:31,779 INFO jawiverse-api Request: GET http://127.0.0.1:8000/docs
+2025-10-05 14:41:31,780 INFO jawiverse-api Response status: 200
+2025-10-05 14:41:31,986 INFO jawiverse-api Request: GET http://127.0.0.1:8000/openapi.json
+2025-10-05 14:41:31,999 INFO jawiverse-api Response status: 200
+2025-10-05 14:42:08,946 INFO jawiverse-api Request: POST http://127.0.0.1:8000/transliterate
+2025-10-05 14:42:08,948 INFO jawiverse-api Transliteration requested: model=rumi2modern, text=pembacaan
+2025-10-05 14:42:08,948 INFO jawiverse-api Transliteration result: ڤeمباچاان
+2025-10-05 14:42:08,950 INFO jawiverse-api Response status: 200
+2025-10-05 14:42:53,894 INFO jawiverse-api Request: POST http://127.0.0.1:8000/transliterate
+2025-10-05 14:42:53,896 INFO jawiverse-api Transliteration requested: model=rumi2modern, text=pembacaan
+2025-10-05 14:42:53,896 INFO jawiverse-api Transliteration result: ڤeمباچاان
+2025-10-05 14:42:53,897 INFO jawiverse-api Response status: 200
+2025-10-05 14:43:18,306 INFO jawiverse-api Request: POST http://127.0.0.1:8000/transliterate
+2025-10-05 14:43:18,307 INFO jawiverse-api Transliteration requested: model=rumi2classical, text=pengajaran
+2025-10-05 14:43:18,307 INFO jawiverse-api Transliteration result: ڤeڠاجاران
+2025-10-05 14:43:18,309 INFO jawiverse-api Response status: 200
+2025-10-05 15:23:31,982 INFO jawiverse-api Request: POST http://127.0.0.1:8000/transliterate
+2025-10-05 15:23:31,983 INFO jawiverse-api Transliteration requested: model=classical2rumi, text=???????
+2025-10-05 15:23:31,983 INFO jawiverse-api Transliteration result: ???????
+2025-10-05 15:23:31,984 INFO jawiverse-api Response status: 200
+2025-10-05 15:23:43,569 INFO jawiverse-api Request: POST http://127.0.0.1:8000/transliterate
+2025-10-05 15:23:43,572 INFO jawiverse-api Transliteration requested: model=rumi2classical, text=pengajaran
+2025-10-05 15:23:43,572 INFO jawiverse-api Transliteration result: ڤeڠاجاران
+2025-10-05 15:23:43,573 INFO jawiverse-api Response status: 200
