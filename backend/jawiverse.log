@@ -52,3 +52,29 @@
 2025-10-05 15:23:43,572 INFO jawiverse-api Transliteration requested: model=rumi2classical, text=pengajaran
 2025-10-05 15:23:43,572 INFO jawiverse-api Transliteration result: ڤeڠاجاران
 2025-10-05 15:23:43,573 INFO jawiverse-api Response status: 200
+2025-12-10 00:03:33,893 INFO jawiverse-api Request: POST http://127.0.0.1:8000/transliterate
+2025-12-10 00:03:33,897 INFO jawiverse-api Transliteration requested: model=modern2rumi, text=??????
+2025-12-10 00:03:33,897 INFO jawiverse-api Transliteration result: ??????
+2025-12-10 00:03:33,898 INFO jawiverse-api Response status: 200
+2025-12-10 00:03:47,280 INFO jawiverse-api Request: POST http://127.0.0.1:8000/transliterate
+2025-12-10 00:03:47,281 INFO jawiverse-api Transliteration requested: model=rumi2modern, text=pembacaan
+2025-12-10 00:03:47,281 INFO jawiverse-api Transliteration result: ڤeمباچاان
+2025-12-10 00:03:47,281 INFO jawiverse-api Response status: 200
+2025-12-10 00:03:52,795 INFO jawiverse-api Request: POST http://127.0.0.1:8000/transliterate
+2025-12-10 00:03:52,797 INFO jawiverse-api Transliteration requested: model=modern2rumi, text=??????
+2025-12-10 00:03:52,797 INFO jawiverse-api Transliteration result: ??????
+2025-12-10 00:03:52,798 INFO jawiverse-api Response status: 200
+2025-12-10 00:03:57,364 INFO jawiverse-api Request: POST http://127.0.0.1:8000/transliterate
+2025-12-10 00:03:57,366 INFO jawiverse-api Transliteration requested: model=modern2rumi, text=??????
+2025-12-10 00:03:57,366 INFO jawiverse-api Transliteration result: ??????
+2025-12-10 00:03:57,367 INFO jawiverse-api Response status: 200
+2025-12-10 00:04:21,479 INFO jawiverse-api Request: POST http://127.0.0.1:8000/transliterate
+2025-12-10 00:04:21,480 INFO jawiverse-api Transliteration requested: model=rumi2classical, text=pengajaran
+2025-12-10 00:04:21,480 INFO jawiverse-api Transliteration result: ڤeڠاجاران
+2025-12-10 00:04:21,480 INFO jawiverse-api Response status: 200
+2025-12-10 00:07:52,817 INFO jawiverse-api Request: GET http://localhost:8000/
+2025-12-10 00:07:52,817 INFO jawiverse-api Response status: 404
+2025-12-10 00:07:52,915 INFO jawiverse-api Request: GET http://localhost:8000/favicon.ico
+2025-12-10 00:07:52,916 INFO jawiverse-api Response status: 404
+2025-12-10 00:08:05,559 INFO jawiverse-api Request: GET http://localhost:8000/transliterate
+2025-12-10 00:08:05,560 INFO jawiverse-api Response status: 405

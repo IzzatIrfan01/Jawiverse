@@ -6,6 +6,8 @@ from pydantic import BaseModel
 from models.classical import classical_jawi_to_rumi, rumi_to_classical_jawi
 from models.modern import modern_jawi_to_rumi, rumi_to_modern_jawi
 
+from fastapi.middleware.cors import CORSMiddleware
+
 # Setup logging to both console and file
 logging.basicConfig(
     level=logging.INFO,
@@ -19,6 +21,16 @@ logger = logging.getLogger("jawiverse-api")
 
 # Initialize app
 app = FastAPI(title="Jawi-Rumi Transliteration API")
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],   # or ["http://127.0.0.1:5500"] if using VSCode Live Server
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 # Request schema
 class TransliterationRequest(BaseModel):
