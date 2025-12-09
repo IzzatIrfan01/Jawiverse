@@ -1,395 +1,575 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JawiVerse | The Digital Key to Jawi Heritage</title>
-    <link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
     <script src="https://unpkg.com/feather-icons"></script>
     <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.waves.min.js"></script>
     <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              primary: "#945034",
-              secondary: "#E7D4B5",
-            },
-          },
-        },
-      };
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#945034',
+                        secondary: '#E7D4B5',
+                    }
+                }
+            }
+        }
     </script>
     <style>
-      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
-      body {
-        font-family: "Poppins", sans-serif;
-      }
-      .vanta-bg {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -1;
-        opacity: 0.3;
-      }
-      .text-jawi {
-        font-family: "Noto Naskh Arabic", serif;
-        font-size: 1.2rem;
-        line-height: 2;
-        direction: rtl;
-      }
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .vanta-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.3;
+        }
+        .text-jawi {
+            font-family: 'Noto Naskh Arabic', serif;
+            font-size: 1.2rem;
+            line-height: 2;
+            direction: rtl;
+        }
+        /* Language Toggle Styles */
+        .language-toggle {
+            position: relative;
+            display: inline-flex;
+            background: #f3f4f6;
+            border-radius: 9999px;
+            padding: 4px;
+        }
+        .language-toggle button {
+            padding: 6px 16px;
+            border-radius: 9999px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .language-toggle button.active {
+            background: white;
+            color: #945034;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .language-toggle button:not(.active):hover {
+            color: #6E4429;
+        }
     </style>
-  </head>
-  <body class="bg-[#FDF6EC] min-h-screen flex flex-col">
+</head>
+<body class="bg-[#FDF6EC] min-h-screen flex flex-col">
     <div id="vanta-bg" class="vanta-bg"></div>
-
+    
     <!-- Header -->
     <header class="bg-primary text-white shadow-lg">
-      <div class="container mx-auto px-4 py-6">
-        <div class="flex justify-between items-center">
-          <div class="flex items-center space-x-2">
-            <i data-feather="align-left" class="text-2xl"></i>
-            <h1 class="text-2xl font-bold">JawiVerse</h1>
-          </div>
-          <nav class="hidden md:flex space-x-8">
-            <a href="#" class="hover:text-secondary font-medium">Home</a>
-            <a href="#" class="hover:text-secondary font-medium">About</a>
-            <a href="#" class="hover:text-secondary font-medium">Guide</a>
-            <!-- <a href="#" class="hover:text-secondary font-medium">API</a> -->
-          </nav>
-          <button class="md:hidden">
-            <i data-feather="menu"></i>
-          </button>
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i data-feather="align-left" class="text-2xl"></i>
+                    <h1 class="text-2xl font-bold">JawiVerse</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <!-- Language Toggle -->
+                    <div class="language-toggle mr-4">
+                        <button id="lang-en" class="active">English</button>
+                        <button id="lang-ms" class="">Bahasa Melayu</button>
+                    </div>
+                    <nav class="hidden md:flex space-x-8">
+                        <a href="#" class="hover:text-secondary font-medium nav-home">Home</a>
+                        <a href="#" class="hover:text-secondary font-medium nav-about">About</a>
+                        <a href="#" class="hover:text-secondary font-medium nav-guide">Guide</a>
+                    </nav>
+                    <button class="md:hidden">
+                        <i data-feather="menu"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="mt-8 text-center">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4 site-title">The Digital Key to Jawi Heritage</h2>
+                <p class="text-xl opacity-90 max-w-2xl mx-auto site-subtitle">Bridging classical Jawi and modern Malay with AI-powered precision</p>
+            </div>
         </div>
-        <div class="mt-8 text-center">
-          <h2 class="text-4xl md:text-5xl font-bold mb-4">
-            The Digital Key to Jawi Heritage
-          </h2>
-          <p class="text-xl opacity-90 max-w-2xl mx-auto">
-            Bridging classical Jawi and modern Malay with AI-powered precision
-          </p>
-        </div>
-      </div>
     </header>
 
     <!-- Main Content -->
     <main class="flex-grow container mx-auto px-4 py-12">
-      <div
-        class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden"
-      >
-        <!-- Mode Selection -->
-        <div class="bg-gradient-to-r from-primary to-secondary p-6">
-          <h3 class="text-white text-xl font-semibold mb-4">
-            Select Transliteration Mode
-          </h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <button
-              class="mode-btn bg-white text-primary py-3 px-6 rounded-lg font-medium hover:bg-opacity-90 transition"
-              data-mode="jawi-roman"
-            >
-              Classical Jawi → Romanized Malay
-            </button>
-            <button
-              class="mode-btn bg-white text-primary py-3 px-6 rounded-lg font-medium hover:bg-opacity-90 transition"
-              data-mode="roman-jawi"
-            >
-              Romanized Malay → Classical Jawi
-            </button>
-            <button
-              class="mode-btn bg-white text-primary py-3 px-6 rounded-lg font-medium hover:bg-opacity-90 transition"
-              data-mode="modern-jawi-roman"
-            >
-              Modern Jawi → Romanized Malay
-            </button>
-            <button
-              class="mode-btn bg-white text-primary py-3 px-6 rounded-lg font-medium hover:bg-opacity-90 transition"
-              data-mode="roman-modern-jawi"
-            >
-              Romanized Malay → Modern Jawi
-            </button>
-          </div>
-        </div>
-
-        <!-- Converter -->
-        <div class="p-6">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label
-                for="input-text"
-                class="block text-gray-700 font-medium mb-2"
-                >Input Text</label
-              >
-              <textarea
-                id="input-text"
-                rows="8"
-                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                placeholder="Enter your text here..."
-              ></textarea>
-              <div class="flex justify-between mt-2">
-                <div class="flex items-center space-x-2">
-                  <button
-                    id="clear-input"
-                    class="text-gray-500 hover:text-primary"
-                  >
-                    <i data-feather="x-circle"></i> Clear
-                  </button>
-                  <button
-                    id="sample-input"
-                    class="text-gray-500 hover:text-primary"
-                  >
-                    <i data-feather="clipboard"></i> Sample
-                  </button>
+        <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+            <!-- Mode Selection -->
+            <div class="bg-gradient-to-r from-primary to-secondary p-6">
+                <h3 class="text-white text-xl font-semibold mb-4 mode-title">Select Transliteration Mode</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <button class="mode-btn bg-white text-primary py-3 px-6 rounded-lg font-medium hover:bg-opacity-90 transition" data-mode="jawi-roman">
+                        <span class="mode-text">Classical Jawi → Romanized Malay</span>
+                    </button>
+                    <button class="mode-btn bg-white text-primary py-3 px-6 rounded-lg font-medium hover:bg-opacity-90 transition" data-mode="roman-jawi">
+                        <span class="mode-text">Romanized Malay → Classical Jawi</span>
+                    </button>
+                    <button class="mode-btn bg-white text-primary py-3 px-6 rounded-lg font-medium hover:bg-opacity-90 transition" data-mode="modern-jawi-roman">
+                        <span class="mode-text">Modern Jawi → Romanized Malay</span>
+                    </button>
+                    <button class="mode-btn bg-white text-primary py-3 px-6 rounded-lg font-medium hover:bg-opacity-90 transition" data-mode="roman-modern-jawi">
+                        <span class="mode-text">Romanized Malay → Modern Jawi</span>
+                    </button>
                 </div>
-                <span id="input-count" class="text-gray-500 text-sm"
-                  >0 characters</span
-                >
-              </div>
             </div>
-            <div>
-              <label
-                for="output-text"
-                class="block text-gray-700 font-medium mb-2"
-                >Output Text</label
-              >
-              <div
-                id="output-text"
-                class="w-full px-4 py-3 min-h-[200px] border border-gray-300 rounded-lg bg-gray-50 text-jawi"
-                contenteditable="false"
-              >
-                <p class="text-gray-400">
-                  Transliterated text will appear here...
-                </p>
-              </div>
-              <div class="flex justify-between mt-2">
-                <button
-                  id="copy-output"
-                  class="text-gray-500 hover:text-primary"
-                >
-                  <i data-feather="copy"></i> Copy
-                </button>
-                <button
-                  id="speak-output"
-                  class="text-gray-500 hover:text-primary"
-                >
-                  <i data-feather="volume-2"></i> Speak
-                </button>
-              </div>
+
+            <!-- Converter -->
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="input-text" class="block text-gray-700 font-medium mb-2 input-label">Input Text</label>
+                        <textarea id="input-text" rows="8" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Enter your text here..."></textarea>
+                        <div class="flex justify-between mt-2">
+                            <div class="flex items-center space-x-2">
+                                <button id="clear-input" class="text-gray-500 hover:text-primary">
+                                    <i data-feather="x-circle"></i> <span class="clear-text">Clear</span>
+                                </button>
+                                <button id="sample-input" class="text-gray-500 hover:text-primary">
+                                    <i data-feather="clipboard"></i> <span class="sample-text">Sample</span>
+                                </button>
+                            </div>
+                            <span id="input-count" class="text-gray-500 text-sm">0 <span class="char-text">characters</span></span>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="output-text" class="block text-gray-700 font-medium mb-2 output-label">Output Text</label>
+                        <div id="output-text" class="w-full px-4 py-3 min-h-[200px] border border-gray-300 rounded-lg bg-gray-50 text-jawi" contenteditable="false">
+                            <p class="text-gray-400 output-placeholder">Transliterated text will appear here...</p>
+                        </div>
+                        <div class="flex justify-between mt-2">
+                            <button id="copy-output" class="text-gray-500 hover:text-primary">
+                                <i data-feather="copy"></i> <span class="copy-text">Copy</span>
+                            </button>
+                            <button id="speak-output" class="text-gray-500 hover:text-primary">
+                                <i data-feather="volume-2"></i> <span class="speak-text">Speak</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex justify-center">
+                    <button id="transliterate-btn" class="bg-primary hover:bg-[#6E4429] text-white font-bold py-3 px-8 rounded-lg shadow-lg transform hover:scale-105 transition duration-300 flex items-center space-x-2">
+                        <i data-feather="refresh-cw" class="animate-spin hidden"></i>
+                        <span class="transliterate-text">Transliterate</span>
+                    </button>
+                </div>
             </div>
-          </div>
+        </div>
 
-          <div class="mt-6 flex justify-center">
-            <button
-              id="transliterate-btn"
-              class="bg-primary hover:bg-[#6E4429] text-white font-bold py-3 px-8 rounded-lg shadow-lg transform hover:scale-105 transition duration-300 flex items-center space-x-2"
-            >
-              <i data-feather="refresh-cw" class="animate-spin hidden"></i>
-              <span>Transliterate</span>
-            </button>
-          </div>
+        <!-- Features Section -->
+        <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition">
+                <div class="text-primary mb-4">
+                    <i data-feather="book" class="w-10 h-10"></i>
+                </div>
+                <h3 class="font-bold text-xl mb-2 feature1-title">Historical Preservation</h3>
+                <p class="text-gray-600 feature1-desc">Accurate conversion of classical Jawi manuscripts to modern Malay, preserving cultural heritage.</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition">
+                <div class="text-primary mb-4">
+                    <i data-feather="cpu" class="w-10 h-10"></i>
+                </div>
+                <h3 class="font-bold text-xl mb-2 feature2-title">AI-Powered Accuracy</h3>
+                <p class="text-gray-600 feature2-desc">State-of-the-art models ensure context-aware transliteration with high precision.</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition">
+                <div class="text-primary mb-4">
+                    <i data-feather="zap" class="w-10 h-10"></i>
+                </div>
+                <h3 class="font-bold text-xl mb-2 feature3-title">Lightning Fast</h3>
+                <p class="text-gray-600 feature3-desc">Optimized backend delivers results in milliseconds, even for lengthy texts.</p>
+            </div>
         </div>
-      </div>
-
-      <!-- Features Section -->
-      <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div
-          class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition"
-        >
-          <div class="text-primary mb-4">
-            <i data-feather="book" class="w-10 h-10"></i>
-          </div>
-          <h3 class="font-bold text-xl mb-2">Historical Preservation</h3>
-          <p class="text-gray-600">
-            Accurate conversion of classical Jawi manuscripts to modern Malay,
-            preserving cultural heritage.
-          </p>
-        </div>
-        <div
-          class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition"
-        >
-          <div class="text-primary mb-4">
-            <i data-feather="cpu" class="w-10 h-10"></i>
-          </div>
-          <h3 class="font-bold text-xl mb-2">AI-Powered Accuracy</h3>
-          <p class="text-gray-600">
-            State-of-the-art models ensure context-aware transliteration with
-            high precision.
-          </p>
-        </div>
-        <div
-          class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition"
-        >
-          <div class="text-primary mb-4">
-            <i data-feather="zap" class="w-10 h-10"></i>
-          </div>
-          <h3 class="font-bold text-xl mb-2">Lightning Fast</h3>
-          <p class="text-gray-600">
-            Optimized backend delivers results in milliseconds, even for lengthy
-            texts.
-          </p>
-        </div>
-      </div>
     </main>
 
     <!-- Footer -->
     <footer class="bg-gray-800 text-white py-12">
-      <div class="container mx-auto px-4">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div>
-            <h3 class="font-bold text-lg mb-4">JawiVerse</h3>
-            <p class="text-gray-400">
-              Bridging the past and present through script transformation
-              technology.
-            </p>
-          </div>
-          <div>
-            <h3 class="font-bold text-lg mb-4">Resources</h3>
-            <ul class="space-y-2">
-              <li>
-                <a href="#" class="text-gray-400 hover:text-white"
-                  >Documentation</a
-                >
-              </li>
-              <li>
-                <a href="#" class="text-gray-400 hover:text-white"
-                  >API Reference</a
-                >
-              </li>
-              <li>
-                <a href="#" class="text-gray-400 hover:text-white"
-                  >Jawi Guide</a
-                >
-              </li>
-            </ul>
-          </div>
-          <!-- <div>
-                    <h3 class="font-bold text-lg mb-4">Legal</h3>
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="font-bold text-lg mb-4 footer-title">JawiVerse</h3>
+                    <p class="text-gray-400 footer-desc">Bridging the past and present through script transformation technology.</p>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-4 footer-resources">Resources</h3>
                     <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a></li> 
-                        <li><a href="#" class="text-gray-400 hover:text-white">Terms of Service</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white footer-doc">Documentation</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white footer-api">API Reference</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white footer-guide">Jawi Guide</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-4 footer-legal">Legal</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white footer-privacy">Privacy Policy</a></li> 
+                        <li><a href="#" class="text-gray-400 hover:text-white footer-terms">Terms of Service</a></li>
                     </ul> 
-                </div>  -->
-          <div>
-            <h3 class="font-bold text-lg mb-4">Connect</h3>
-            <div class="flex space-x-4">
-              <a href="#" class="text-gray-400 hover:text-white"
-                ><i data-feather="twitter"></i
-              ></a>
-              <a href="#" class="text-gray-400 hover:text-white"
-                ><i data-feather="github"></i
-              ></a>
-              <a href="#" class="text-gray-400 hover:text-white"
-                ><i data-feather="mail"></i
-              ></a>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-4 footer-connect">Connect</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><i data-feather="twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i data-feather="github"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i data-feather="mail"></i></a>
+                    </div>
+                </div>
             </div>
-          </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p class="copyright">© 2025 JawiVerse. All rights reserved.</p>
+            </div>
         </div>
-        <div
-          class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400"
-        >
-          <p>© 2025 JawiVerse. All rights reserved.</p>
-        </div>
-      </div>
     </footer>
 
     <script>
-      feather.replace();
-
-      // Vanta.js background
-      VANTA.WAVES({
-        el: "#vanta-bg",
-        mouseControls: true,
-        touchControls: true,
-        gyroControls: false,
-        minHeight: 200.0,
-        minWidth: 200.0,
-        scale: 1.0,
-        scaleMobile: 1.0,
-        color: 0x8b5e3c,
-        shininess: 35.0,
-        waveHeight: 15.0,
-        waveSpeed: 0.75,
-        zoom: 0.8,
-      });
-
-      // Character counter
-      const inputText = document.getElementById("input-text");
-      const inputCount = document.getElementById("input-count");
-
-      inputText.addEventListener("input", () => {
-        inputCount.textContent = `${inputText.value.length} characters`;
-      });
-
-      // Mode selection
-      const modeButtons = document.querySelectorAll(".mode-btn");
-      modeButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-          modeButtons.forEach((btn) =>
-            btn.classList.remove("ring-2", "ring-secondary")
-          );
-          button.classList.add("ring-2", "ring-secondary");
-          // Add logic for mode change
+        feather.replace();
+        
+        // Vanta.js background
+        VANTA.WAVES({
+            el: "#vanta-bg",
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            scale: 1.00,
+            scaleMobile: 1.00,
+            color: 0x8B5E3C,
+            shininess: 35.00,
+            waveHeight: 15.00,
+            waveSpeed: 0.75,
+            zoom: 0.80
         });
-      });
 
-      // Copy output
-      document.getElementById("copy-output").addEventListener("click", () => {
-        const outputText = document.getElementById("output-text").textContent;
-        navigator.clipboard.writeText(outputText);
-        // Show toast notification
-      });
+        // Language translations
+        const translations = {
+            en: {
+                // Header
+                siteTitle: "The Digital Key to Jawi Heritage",
+                siteSubtitle: "Bridging classical Jawi and modern Malay with AI-powered precision",
+                navHome: "Home",
+                navAbout: "About",
+                navGuide: "Guide",
+                
+                // Converter
+                modeTitle: "Select Transliteration Mode",
+                mode1: "Classical Jawi → Romanized Malay",
+                mode2: "Romanized Malay → Classical Jawi",
+                mode3: "Modern Jawi → Romanized Malay",
+                mode4: "Romanized Malay → Modern Jawi",
+                inputLabel: "Input Text",
+                outputLabel: "Output Text",
+                outputPlaceholder: "Transliterated text will appear here...",
+                clear: "Clear",
+                sample: "Sample",
+                char: "characters",
+                copy: "Copy",
+                speak: "Speak",
+                transliterate: "Transliterate",
+                
+                // Features
+                feature1Title: "Historical Preservation",
+                feature1Desc: "Accurate conversion of classical Jawi manuscripts to modern Malay, preserving cultural heritage.",
+                feature2Title: "AI-Powered Accuracy",
+                feature2Desc: "State-of-the-art models ensure context-aware transliteration with high precision.",
+                feature3Title: "Lightning Fast",
+                feature3Desc: "Optimized backend delivers results in milliseconds, even for lengthy texts.",
+                
+                // Footer
+                footerTitle: "JawiVerse",
+                footerDesc: "Bridging the past and present through script transformation technology.",
+                footerResources: "Resources",
+                footerLegal: "Legal",
+                footerConnect: "Connect",
+                footerDoc: "Documentation",
+                footerApi: "API Reference",
+                footerGuide: "Jawi Guide",
+                footerPrivacy: "Privacy Policy",
+                footerTerms: "Terms of Service",
+                copyright: "© 2025 JawiVerse. All rights reserved."
+            },
+            ms: {
+                // Header
+                siteTitle: "Kunci Digital kepada Warisan Jawi",
+                siteSubtitle: "Menghubungkan tulisan Jawi klasik dan Melayu moden dengan ketepatan berkuasa AI",
+                navHome: "Laman Utama",
+                navAbout: "Tentang",
+                navGuide: "Panduan",
+                
+                // Converter
+                modeTitle: "Pilih Mod Transliterasi",
+                mode1: "Jawi Klasik → Melayu Rumi",
+                mode2: "Melayu Rumi → Jawi Klasik",
+                mode3: "Jawi Moden → Melayu Rumi",
+                mode4: "Melayu Rumi → Jawi Moden",
+                inputLabel: "Teks Input",
+                outputLabel: "Teks Output",
+                outputPlaceholder: "Teks transliterasi akan dipaparkan di sini...",
+                clear: "Kosongkan",
+                sample: "Contoh",
+                char: "aksara",
+                copy: "Salin",
+                speak: "Dengar",
+                transliterate: "Transliterasi",
+                
+                // Features
+                feature1Title: "Pemeliharaan Sejarah",
+                feature1Desc: "Penukaran tepat manuskrip Jawi klasik kepada Melayu moden untuk memelihara warisan budaya.",
+                feature2Title: "Ketepatan Berkuasa AI",
+                feature2Desc: "Model terkini memastikan transliterasi memahami konteks dengan ketepatan tinggi.",
+                feature3Title: "Sepantas Kilat",
+                feature3Desc: "Backend yang dioptimumkan memberikan hasil dalam beberapa saat, walaupun untuk teks yang panjang.",
+                
+                // Footer
+                footerTitle: "JawiVerse",
+                footerDesc: "Menghubungkan masa lalu dan masa kini melalui teknologi transformasi tulisan.",
+                footerResources: "Sumber",
+                footerLegal: "Undang-undang",
+                footerConnect: "Hubungi",
+                footerDoc: "Dokumentasi",
+                footerApi: "Rujukan API",
+                footerGuide: "Panduan Jawi",
+                footerPrivacy: "Dasar Privasi",
+                footerTerms: "Terma Perkhidmatan",
+                copyright: "© 2025 JawiVerse. Hak cipta terpelihara."
+            }
+        };
 
-      // Sample text
-      document.getElementById("sample-input").addEventListener("click", () => {
-        const currentMode =
-          document.querySelector(".mode-btn.ring-2").dataset.mode;
-        let sampleText = "";
+        // Language state
+        let currentLang = 'en';
 
-        if (currentMode.includes("jawi")) {
-          sampleText = "كيت ممنوع جوݢ ماسق وقت ڤاعين تيدق ڤرناه";
-        } else {
-          sampleText =
-            "Kita dilarang masuk ketika permainan sedang berlangsung";
+        // Function to update all text elements
+        function updateLanguage(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+            
+            // Update header
+            document.querySelector('.site-title').textContent = t.siteTitle;
+            document.querySelector('.site-subtitle').textContent = t.siteSubtitle;
+            document.querySelector('.nav-home').textContent = t.navHome;
+            document.querySelector('.nav-about').textContent = t.navAbout;
+            document.querySelector('.nav-guide').textContent = t.navGuide;
+            
+            // Update converter
+            document.querySelector('.mode-title').textContent = t.modeTitle;
+            const modeTexts = document.querySelectorAll('.mode-text');
+            modeTexts[0].textContent = t.mode1;
+            modeTexts[1].textContent = t.mode2;
+            modeTexts[2].textContent = t.mode3;
+            modeTexts[3].textContent = t.mode4;
+            
+            document.querySelector('.input-label').textContent = t.inputLabel;
+            document.querySelector('.output-label').textContent = t.outputLabel;
+            document.querySelector('.output-placeholder').textContent = t.outputPlaceholder;
+            document.querySelector('.clear-text').textContent = t.clear;
+            document.querySelector('.sample-text').textContent = t.sample;
+            document.querySelector('.copy-text').textContent = t.copy;
+            document.querySelector('.speak-text').textContent = t.speak;
+            document.querySelector('.transliterate-text').textContent = t.transliterate;
+            
+            // Update character count
+            const charText = document.querySelector('.char-text');
+            if (charText) charText.textContent = t.char;
+            
+            // Update features
+            document.querySelector('.feature1-title').textContent = t.feature1Title;
+            document.querySelector('.feature1-desc').textContent = t.feature1Desc;
+            document.querySelector('.feature2-title').textContent = t.feature2Title;
+            document.querySelector('.feature2-desc').textContent = t.feature2Desc;
+            document.querySelector('.feature3-title').textContent = t.feature3Title;
+            document.querySelector('.feature3-desc').textContent = t.feature3Desc;
+            
+            // Update footer
+            document.querySelector('.footer-title').textContent = t.footerTitle;
+            document.querySelector('.footer-desc').textContent = t.footerDesc;
+            document.querySelector('.footer-resources').textContent = t.footerResources;
+            document.querySelector('.footer-legal').textContent = t.footerLegal;
+            document.querySelector('.footer-connect').textContent = t.footerConnect;
+            document.querySelector('.footer-doc').textContent = t.footerDoc;
+            document.querySelector('.footer-api').textContent = t.footerApi;
+            document.querySelector('.footer-guide').textContent = t.footerGuide;
+            document.querySelector('.footer-privacy').textContent = t.footerPrivacy;
+            document.querySelector('.footer-terms').textContent = t.footerTerms;
+            document.querySelector('.copyright').textContent = t.copyright;
+            
+            // Update input placeholder based on current mode
+            const currentMode = document.querySelector('.mode-btn.ring-2')?.dataset.mode;
+            updateInputPlaceholder(currentMode);
+            
+            // Update sample text
+            updateSampleText();
         }
 
-        inputText.value = sampleText;
-        inputCount.textContent = `${sampleText.length} characters`;
-      });
-
-      // Transliterate button
-      document
-        .getElementById("transliterate-btn")
-        .addEventListener("click", () => {
-          const input = inputText.value;
-          if (!input.trim()) return;
-
-          const button = document.getElementById("transliterate-btn");
-          const icon = button.querySelector("i");
-
-          // Show loading state
-          icon.classList.remove("hidden");
-          button.disabled = true;
-
-          // Simulate API call
-          setTimeout(() => {
-            // This would be replaced with actual API call
-            const outputDiv = document.getElementById("output-text");
-            if (input.includes("كيت") || input.includes("Kita")) {
-              outputDiv.innerHTML = input.includes("كيت")
-                ? '<p class="text-jawi">Kita dilarang masuk ketika permainan sedang berlangsung</p>'
-                : '<p class="text-jawi">كيت ممنوع جوݢ ماسق وقت ڤاعين تيدق ڤرناه</p>';
+        // Function to update input placeholder based on mode and language
+        function updateInputPlaceholder(mode) {
+            const inputText = document.getElementById('input-text');
+            if (!mode) return;
+            
+            if (currentLang === 'en') {
+                if (mode.includes('jawi-')) {
+                    inputText.placeholder = "Enter Jawi text here...";
+                } else {
+                    inputText.placeholder = "Enter Romanized Malay text here...";
+                }
             } else {
-              outputDiv.innerHTML =
-                '<p class="text-jawi">Example transliterated output would appear here. This is a simulation.</p>';
+                if (mode.includes('jawi-')) {
+                    inputText.placeholder = "Masukkan teks Jawi di sini...";
+                } else {
+                    inputText.placeholder = "Masukkan teks Melayu Rumi di sini...";
+                }
             }
+        }
 
-            // Hide loading state
-            icon.classList.add("hidden");
-            button.disabled = false;
-          }, 1000);
+        // Function to update sample text based on language
+        function updateSampleText() {
+            // This will be used by the sample button click handler
+            const currentMode = document.querySelector('.mode-btn.ring-2')?.dataset.mode;
+            if (!currentMode) return;
+            
+            // Sample texts remain the same, only the instruction changes
+        }
+
+        // Language toggle functionality
+        document.getElementById('lang-en').addEventListener('click', () => {
+            document.getElementById('lang-en').classList.add('active');
+            document.getElementById('lang-ms').classList.remove('active');
+            updateLanguage('en');
         });
+
+        document.getElementById('lang-ms').addEventListener('click', () => {
+            document.getElementById('lang-ms').classList.add('active');
+            document.getElementById('lang-en').classList.remove('active');
+            updateLanguage('ms');
+        });
+
+        // Character counter
+        const inputText = document.getElementById('input-text');
+        const inputCount = document.getElementById('input-count');
+        
+        inputText.addEventListener('input', () => {
+            const t = translations[currentLang];
+            inputCount.textContent = `${inputText.value.length} ${t.char}`;
+        });
+
+        // Mode selection
+        const modeButtons = document.querySelectorAll('.mode-btn');
+        modeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                modeButtons.forEach(btn => btn.classList.remove('ring-2', 'ring-secondary'));
+                button.classList.add('ring-2', 'ring-secondary');
+                updateInputPlaceholder(button.dataset.mode);
+                updateSampleText();
+            });
+        });
+
+        // Copy output
+        document.getElementById('copy-output').addEventListener('click', () => {
+            const outputText = document.getElementById('output-text').textContent;
+            navigator.clipboard.writeText(outputText);
+            // Show toast notification (you can add this later)
+            alert(currentLang === 'en' ? 'Copied to clipboard!' : 'Disalin ke papan keratan!');
+        });
+
+        // Sample text
+        document.getElementById('sample-input').addEventListener('click', () => {
+            const currentMode = document.querySelector('.mode-btn.ring-2')?.dataset.mode;
+            let sampleText = '';
+            
+            if (currentMode.includes('jawi')) {
+                sampleText = 'كيت ممنوع جوݢ ماسق وقت ڤاعين تيدق ڤرناه';
+            } else {
+                sampleText = 'Kita dilarang masuk ketika permainan sedang berlangsung';
+            }
+            
+            inputText.value = sampleText;
+            const t = translations[currentLang];
+            inputCount.textContent = `${sampleText.length} ${t.char}`;
+        });
+
+        // Clear input
+        document.getElementById('clear-input').addEventListener('click', () => {
+            inputText.value = '';
+            const t = translations[currentLang];
+            inputCount.textContent = `0 ${t.char}`;
+        });
+
+        // Transliterate button
+        document.getElementById('transliterate-btn').addEventListener('click', () => {
+            const input = inputText.value;
+            if (!input.trim()) {
+                alert(currentLang === 'en' ? 'Please enter some text!' : 'Sila masukkan teks!');
+                return;
+            }
+            
+            const button = document.getElementById('transliterate-btn');
+            const icon = button.querySelector('i');
+            
+            // Show loading state
+            icon.classList.remove('hidden');
+            button.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                // This would be replaced with actual API call
+                const outputDiv = document.getElementById('output-text');
+                if (input.includes('كيت') || input.includes('Kita')) {
+                    outputDiv.innerHTML = input.includes('كيت') 
+                        ? '<p class="text-jawi">Kita dilarang masuk ketika permainan sedang berlangsung</p>'
+                        : '<p class="text-jawi">كيت ممنوع جوݢ ماسق وقت ڤاعين تيدق ڤرناه</p>';
+                } else {
+                    const t = translations[currentLang];
+                    outputDiv.innerHTML = `<p class="text-jawi">${currentLang === 'en' ? 'Example transliterated output would appear here. This is a simulation.' : 'Contoh output transliterasi akan muncul di sini. Ini adalah simulasi.'}</p>`;
+                }
+                
+                // Hide loading state
+                icon.classList.add('hidden');
+                button.disabled = false;
+            }, 1000);
+        });
+
+        // Speak output (text-to-speech)
+        document.getElementById('speak-output').addEventListener('click', () => {
+            const outputText = document.getElementById('output-text').textContent;
+            if (!outputText || outputText.includes('Transliterated') || outputText.includes('transliterasi')) {
+                alert(currentLang === 'en' ? 'No output to speak!' : 'Tiada output untuk diucapkan!');
+                return;
+            }
+            
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(outputText);
+                // Set language based on content
+                if (outputText.match(/[\u0600-\u06FF]/)) {
+                    utterance.lang = 'ms'; // Arabic script detected
+                } else {
+                    utterance.lang = currentLang === 'en' ? 'en-US' : 'ms-MY';
+                }
+                speechSynthesis.speak(utterance);
+            } else {
+                alert(currentLang === 'en' ? 'Text-to-speech not supported in your browser' : 'Ucapan teks tidak disokong dalam penyemak imbas anda');
+            }
+        });
+
+        // Initialize first mode button as active
+        if (modeButtons.length > 0) {
+            modeButtons[0].classList.add('ring-2', 'ring-secondary');
+            updateInputPlaceholder(modeButtons[0].dataset.mode);
+        }
+
+        // Initialize character counter
+        const t = translations[currentLang];
+        inputCount.textContent = `0 ${t.char}`;
     </script>
-  </body>
+</body>
 </html>
