@@ -10,7 +10,7 @@ import {
 const Converter = ({ currentLang }) => {
   const [inputText, setInputText] = useState('');
   const [outputText, setOutputText] = useState('');
-  const [currentMode, setCurrentMode] = useState('jawi-roman');
+  const [currentMode, setCurrentMode] = useState('old-jawi-roman');
   const [isLoading, setIsLoading] = useState(false);
 
   const translations = {
@@ -51,8 +51,8 @@ const Converter = ({ currentLang }) => {
   const t = translations[currentLang];
 
   const modes = [
-    { id: 'jawi-roman', label: t.mode1 },
-    { id: 'roman-jawi', label: t.mode2 },
+    { id: 'old-jawi-roman', label: t.mode1 },
+    { id: 'roman-old-jawi', label: t.mode2 },
     { id: 'modern-jawi-roman', label: t.mode3 },
     { id: 'roman-modern-jawi', label: t.mode4 }
   ];
@@ -69,15 +69,39 @@ const Converter = ({ currentLang }) => {
     }
   };
 
-  const handleSampleText = () => {
+const handleSampleText = () => {
     let sampleText = '';
-    if (currentMode.includes('jawi')) {
-      sampleText = 'كيت ممنوع جوݢ ماسق وقت ڤاعين تيدق ڤرناه';
-    } else {
-      sampleText = 'Kita dilarang masuk ketika permainan sedang berlangsung';
+
+    // Check for the specific mode to determine the exact sample
+    switch (currentMode) {
+        case 'roman-modern-jawi':
+            // Sample for Rumi input (modern-style translation)
+            sampleText = 'Ini hasil bergadang dan kerja keras';
+            break;
+            
+        case 'old-jawi-roman':
+            // Sample for Jawi input (classic Jawi text that translates to Rumi)
+            sampleText = 'دان‭ ‬جوݢ‭ ‬كرج‮٢‬‭ ‬مڠوكير‭ ‬دان‭ ‬ممبواة‭ ‬ڤركاكس‮٢‬‭ ‬لاࢨن‭ ‬داڤة‭ ‬موده‭ ‬دحاصلكن‭.‬';
+            break;
+        case 'modern-jawi-roman': 
+            // Sample for Jawi input (classic Jawi text that translates to Rumi)
+            sampleText = 'اين حاصيل برڬادڠ دان كرجا كراس';
+            break;
+
+        case 'roman-old-jawi':
+            // Sample for Rumi input (classic Jawi translation)
+            // You may want to define a new Rumi sample here, or use the modern one for now.
+            // Using the modern Rumi one since the output is the only difference.
+            sampleText = 'Dan juga kerja-kerja mengukir dan membuat perkakas-perkakas lain dapat mudah dihasilkan.';
+            break;
+
+        default:
+            // Fallback sample if a mode is not recognized (optional)
+            sampleText = ''; 
     }
+    
     setInputText(sampleText);
-  };
+};
 
   const handleClearInput = () => {
     setInputText('');
@@ -105,29 +129,67 @@ const Converter = ({ currentLang }) => {
     }
   };
 
-  const handleTransliterate = () => {
+const handleTransliterate = () => {
     if (!inputText.trim()) {
-      alert(currentLang === 'en' ? 'Please enter some text!' : 'Sila masukkan teks!');
-      return;
+        alert(currentLang === 'en' ? 'Please enter some text!' : 'Sila masukkan teks!');
+        return;
     }
 
     setIsLoading(true);
 
-    setTimeout(() => {
-      let result = '';
-      if (inputText.includes('كيت') || inputText.includes('Kita')) {
-        result = inputText.includes('كيت') 
-          ? 'Kita dilarang masuk ketika permainan sedang berlangsung'
-          : 'كيت ممنوع جوݢ ماسق وقت ڤاعين تيدق ڤرناه';
-      } else {
+    // Define the specific sample input and output pairs for the simulation
+    const romanModernSampleInput = 'Ini hasil bergadang dan kerja keras';
+    const jawiModernSampleOutput = 'اين حاصيل برڬادڠ دان كرجا كراس'; // Output for roman-modern-jawi
+
+    const jawiClassicSampleInput = 'دان‭ ‬جوݢ‭ ‬كرج‮٢‬‭ ‬مڠوكير‭ ‬دان‭ ‬ممبواة‭ ‬ڤركاكس‮٢‬‭ ‬لاࢨن‭ ‬داڤة‭ ‬موده‭ ‬دحاصلكن‭.‬';
+    const romanClassicSampleOutput = 'Dan juga kerja-kerja mengukir dan membuat perkakas-perkakas lain dapat mudah dihasilkan.'; // Output for old-jawi-roman
+
+    let result = '';
+
+    // Simulate Transliteration based on current mode and input text
+    switch (currentMode) {
+        // Rumi Input Modes (Output is Jawi)
+        case 'roman-modern-jawi':
+            if (inputText.trim() === romanModernSampleInput.trim()) {
+                result = jawiModernSampleOutput;
+            }
+            break;
+        case 'roman-old-jawi':
+            // Check if the input matches the sample text for Rumi-to-Jawi
+            if (inputText.trim() === romanClassicSampleOutput.trim()) {
+                result = jawiClassicSampleInput;
+            }
+            break;
+
+        // Jawi Input Modes (Output is Rumi)
+        case 'old-jawi-roman':
+            if (inputText.trim() === jawiClassicSampleInput.trim()) {
+                result = romanClassicSampleOutput;
+            }
+            break;
+
+        case 'modern-jawi-roman':
+            // Check if the input matches the sample text for Jawi-to-Roman
+            if (inputText.trim() === jawiModernSampleOutput.trim()) {
+                result = romanModernSampleInput;
+            }
+            break;
+    }
+
+
+    // If no specific sample match, use the generic simulation text
+    if (!result) {
         result = currentLang === 'en' 
-          ? 'Example transliterated output would appear here. This is a simulation.'
-          : 'Contoh output transliterasi akan muncul di sini. Ini adalah simulasi.';
-      }
-      setOutputText(result);
-      setIsLoading(false);
+            ? 'Transliterated output would appear here. This is a simulation.'
+            : 'Hasil transliterasi akan muncul di sini. Ini adalah simulasi.';
+    }
+
+    // Delay simulation
+    setTimeout(() => {
+        setOutputText(result);
+        setIsLoading(false);
     }, 1000);
-  };
+};
 
   return (
     <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">

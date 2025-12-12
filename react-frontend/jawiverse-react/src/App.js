@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useVanta } from './hooks/useVanta';
 import Header from './components/Header';
 import Converter from './components/Converter';
-import Features from './components/Features';
+// import Features from './components/Features';
 import Footer from './components/Footer';
 
 function App() {
@@ -24,7 +24,7 @@ function App() {
       
       <main className="flex-grow container mx-auto px-4 py-12 relative z-10">
         <Converter currentLang={currentLang} />
-        <Features currentLang={currentLang} />
+        {/* <Features currentLang={currentLang} /> */}
       </main>
       
       <Footer currentLang={currentLang} />
