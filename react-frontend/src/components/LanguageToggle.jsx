@@ -1,5 +1,4 @@
 import React from 'react';
-import { translations } from '../constants/translations';
 
 const LanguageToggle = ({ currentLang, onLanguageChange }) => {
   return (
@@ -9,7 +8,7 @@ const LanguageToggle = ({ currentLang, onLanguageChange }) => {
         className={`px-4 py-2 rounded-full transition-all ${
           currentLang === 'en'
             ? 'bg-white text-primary shadow-lg'
-            : 'bg-transparent text-gray-600 hover:text-primary'
+            : 'bg-transparent text-gray-600 hover:text-secondary'
         }`}
         onClick={() => onLanguageChange('en')}
       >
@@ -20,7 +19,7 @@ const LanguageToggle = ({ currentLang, onLanguageChange }) => {
         className={`px-4 py-2 rounded-full transition-all ${
           currentLang === 'ms'
             ? 'bg-white text-primary shadow-lg'
-            : 'bg-transparent text-gray-600 hover:text-primary'
+            : 'bg-transparent text-gray-600 hover:text-secondary'
         }`}
         onClick={() => onLanguageChange('ms')}
       >

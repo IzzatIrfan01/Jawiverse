@@ -31,10 +31,7 @@ const Header = ({ currentLang, onLanguageChange }) => {
             <h1 className="text-2xl font-bold">JawiVerse</h1>
           </div>
           <div className="flex items-center space-x-4">
-            <LanguageToggle 
-              currentLang={currentLang} 
-              onLanguageChange={onLanguageChange} 
-            />
+
             <nav className="hidden md:flex space-x-8">
               <a href="#" className="hover:text-secondary font-medium">
                 {t.navHome}
@@ -46,6 +43,10 @@ const Header = ({ currentLang, onLanguageChange }) => {
                 {t.navGuide}
               </a>
             </nav>
+            <LanguageToggle 
+              currentLang={currentLang} 
+              onLanguageChange={onLanguageChange} 
+            />
             <button className="md:hidden">
               <Menu />  {/* Use Menu component directly */}
             </button>
