@@ -1,5 +1,4 @@
 import React from 'react';
-import { translations } from '../constants/translations';
 
 const LanguageToggle = ({ currentLang, onLanguageChange }) => {
   return (
