@@ -1,5 +1,5 @@
 .jawiverse
 __pycache__
-jawirumi_v1_model\tokenizer.json
-jawirumi_v1_model\optimizer.pt
-jawirumi_v1_model\adapter_model.safetensors
+jawirumi_v1_model/tokenizer.json
+jawirumi_v1_model/optimizer.pt
+jawirumi_v1_model/adapter_model.safetensors
