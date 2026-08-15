@@ -48,17 +48,17 @@ const Footer = ({ currentLang }) => {
             <h3 className="font-bold text-lg mb-4">{t.footerResources}</h3>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-gray-400 hover:text-white">
+                <a href="/doc" className="text-gray-400 hover:text-white">
                   {t.footerDoc}
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:text-white">
+                <a href="/api" className="text-gray-400 hover:text-white">
                   {t.footerApi}
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:text-white">
+                <a href="/guide" className="text-gray-400 hover:text-white">
                   {t.footerGuide}
                 </a>
               </li>
@@ -70,12 +70,12 @@ const Footer = ({ currentLang }) => {
             <h3 className="font-bold text-lg mb-4">{t.footerLegal}</h3>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-gray-400 hover:text-white">
+                <a href="/privacy" className="text-gray-400 hover:text-white">
                   {t.footerPrivacy}
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:text-white">
+                <a href="/footer" className="text-gray-400 hover:text-white">
                   {t.footerTerms}
                 </a>
               </li>
@@ -86,13 +86,13 @@ const Footer = ({ currentLang }) => {
           <div>
             <h3 className="font-bold text-lg mb-4">{t.footerConnect}</h3>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-white">
+              <a href="/twitter" className="text-gray-400 hover:text-white">
                 <Twitter />  {/* Twitter component */}
               </a>
-              <a href="#" className="text-gray-400 hover:text-white">
+              <a href="/github" className="text-gray-400 hover:text-white">
                 <GitHub />   {/* GitHub component with capital H */}
               </a>
-              <a href="#" className="text-gray-400 hover:text-white">
+              <a href="/email" className="text-gray-400 hover:text-white">
                 <Mail />     {/* Mail component */}
               </a>
             </div>

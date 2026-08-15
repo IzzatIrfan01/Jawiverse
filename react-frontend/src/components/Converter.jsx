@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   XCircle, 
   Clipboard, 
@@ -148,32 +148,36 @@ const handleTransliterate = () => {
 
     // Simulate Transliteration based on current mode and input text
     switch (currentMode) {
-        // Rumi Input Modes (Output is Jawi)
-        case 'roman-modern-jawi':
-            if (inputText.trim() === romanModernSampleInput.trim()) {
-                result = jawiModernSampleOutput;
-            }
-            break;
-        case 'roman-old-jawi':
-            // Check if the input matches the sample text for Rumi-to-Jawi
-            if (inputText.trim() === romanClassicSampleOutput.trim()) {
-                result = jawiClassicSampleInput;
-            }
-            break;
+      // Rumi Input Modes (Output is Jawi)
+      case 'roman-modern-jawi':
+        if (inputText.trim() === romanModernSampleInput.trim()) {
+          result = jawiModernSampleOutput;
+        }
+        break;
 
-        // Jawi Input Modes (Output is Rumi)
-        case 'old-jawi-roman':
-            if (inputText.trim() === jawiClassicSampleInput.trim()) {
-                result = romanClassicSampleOutput;
-            }
-            break;
+      case 'roman-old-jawi':
+        if (inputText.trim() === romanClassicSampleOutput.trim()) {
+          result = jawiClassicSampleInput;
+        }
+        break;
 
-        case 'modern-jawi-roman':
-            // Check if the input matches the sample text for Jawi-to-Roman
-            if (inputText.trim() === jawiModernSampleOutput.trim()) {
-                result = romanModernSampleInput;
-            }
-            break;
+      // Jawi Input Modes (Output is Rumi)
+      case 'old-jawi-roman':
+        if (inputText.trim() === jawiClassicSampleInput.trim()) {
+          result = romanClassicSampleOutput;
+        }
+        break;
+
+      case 'modern-jawi-roman':
+        if (inputText.trim() === jawiModernSampleOutput.trim()) {
+          result = romanModernSampleInput;
+        }
+        break;
+
+      default:
+        // No specific mode matched — leave `result` empty so the generic
+        // fallback below sets the simulated output.
+        break;
     }
 
 

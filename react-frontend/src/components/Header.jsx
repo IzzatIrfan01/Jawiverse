@@ -33,13 +33,13 @@ const Header = ({ currentLang, onLanguageChange }) => {
           <div className="flex items-center space-x-4">
 
             <nav className="hidden md:flex space-x-8">
-              <a href="#" className="hover:text-secondary font-medium">
+              <a href="/home" className="hover:text-secondary font-medium">
                 {t.navHome}
               </a>
-              <a href="#" className="hover:text-secondary font-medium">
+              <a href="/about" className="hover:text-secondary font-medium">
                 {t.navAbout}
               </a>
-              <a href="#" className="hover:text-secondary font-medium">
+              <a href="/guide" className="hover:text-secondary font-medium">
                 {t.navGuide}
               </a>
             </nav>

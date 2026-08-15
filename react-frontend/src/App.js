@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import { useVanta } from './hooks/useVanta';
 import Header from './components/Header';
 import Converter from './components/Converter';
