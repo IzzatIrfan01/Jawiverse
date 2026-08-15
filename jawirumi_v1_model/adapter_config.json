@@ -1,5 +1,7 @@
 {
+  "alora_invocation_tokens": null,
   "alpha_pattern": {},
+  "arrow_config": null,
   "auto_mapping": {
     "base_model_class": "LlamaForCausalLM",
     "parent_library": "transformers.models.llama.modeling_llama",
@@ -8,6 +10,7 @@
   "base_model_name_or_path": "unsloth/llama-3.2-3b-instruct-unsloth-bnb-4bit",
   "bias": "none",
   "corda_config": null,
+  "ensure_weight_tying": false,
   "eva_config": null,
   "exclude_modules": null,
   "fan_in_fan_out": false,
@@ -24,18 +27,19 @@
   "megatron_core": "megatron.core",
   "modules_to_save": null,
   "peft_type": "LORA",
+  "peft_version": "0.18.1",
   "qalora_group_size": 16,
   "r": 16,
   "rank_pattern": {},
   "revision": null,
   "target_modules": [
-    "o_proj",
-    "gate_proj",
-    "up_proj",
-    "q_proj",
-    "k_proj",
     "down_proj",
-    "v_proj"
+    "q_proj",
+    "gate_proj",
+    "o_proj",
+    "v_proj",
+    "k_proj",
+    "up_proj"
   ],
   "target_parameters": null,
   "task_type": "CAUSAL_LM",
