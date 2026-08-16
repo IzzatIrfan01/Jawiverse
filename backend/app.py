@@ -1,10 +1,7 @@
 import logging
 from fastapi import FastAPI, HTTPException, Request
 from pydantic import BaseModel
-
-# Import your functions
-from models.classical import classical_jawi_to_rumi, rumi_to_classical_jawi
-from models.modern import modern_jawi_to_rumi, rumi_to_modern_jawi
+from models.llm_inference import inferencer
 
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -51,17 +48,14 @@ def transliterate(request: TransliterationRequest):
 
     logger.info(f"Transliteration requested: model={model}, text={text}")
 
-    if model == "classical2rumi":
-        result = classical_jawi_to_rumi(text)
-    elif model == "rumi2classical":
-        result = rumi_to_classical_jawi(text)
-    elif model == "modern2rumi":
-        result = modern_jawi_to_rumi(text)
-    elif model == "rumi2modern":
-        result = rumi_to_modern_jawi(text)
+    # Use LLM for jawi2rumi and rumi2jawi only
+    if model == "jawi2rumi":
+        result = inferencer.transliterate(text, mode="jawi2rumi")
+    elif model == "rumi2jawi":
+        result = inferencer.transliterate(text, mode="rumi2jawi")
     else:
         logger.error(f"Invalid model selected: {model}")
-        raise HTTPException(status_code=400, detail="Invalid model selected")
+        raise HTTPException(status_code=400, detail="Invalid model selected. Use 'jawi2rumi' or 'rumi2jawi'")
 
     logger.info(f"Transliteration result: {result}")
     return {"model": model, "input": text, "output": result}
