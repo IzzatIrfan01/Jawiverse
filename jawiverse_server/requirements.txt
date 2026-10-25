@@ -1,0 +1,31 @@
+# Install torch FIRST, separately, matching your server's CUDA driver --
+# see https://pytorch.org/get-started/locally/ for the right command.
+# It's deliberately not pinned/listed here since the correct wheel depends
+# on the CUDA version installed on each machine (e.g. RTX 3090 vs the
+# RTX PRO 6000 Blackwell may want different cu12x builds).
+#
+# Then:  pip install -r requirements.txt
+
+# --- Used by both train_jawi_rumi.py and infer_jawi_rumi.py ---
+transformers==4.55.4
+peft
+pandas
+openpyxl
+requests
+
+# --- GPU fast path (--device cuda): Unsloth + 4-bit ---
+unsloth
+unsloth_zoo
+bitsandbytes
+accelerate
+triton
+trl==0.22.2
+sentencepiece
+protobuf
+datasets>=3.4.1,<4.0.0
+huggingface_hub>=0.34.0
+
+# --- Evaluation mode only (infer_jawi_rumi.py --eval-xlsx) ---
+evaluate
+jiwer
+tqdm
