@@ -236,3 +236,40 @@
 2026-08-17 00:00:15,597 INFO jawiverse-api Transliteration requested: model=rumi2jawi, text=ijat sakit perut
 2026-08-17 00:00:36,619 INFO jawiverse-api Transliteration result: <rumi2jawi> ijat sakit perut ڤرڤت ڤرڤيتاڽ ڤرڤيتاڽ ڤرڤيتاڽ ڤرڤيتاڽ ڤرڤيتاڽ ڤرڤيتاڽ ڤرڤيتاڽ ڤرڤيتاڽ ڤرڤيتاڽ ڤرڤيتاڽ ڤرڤيتاڽ ڤرڤيتاڽ 
 2026-08-17 00:00:36,620 INFO jawiverse-api Response status: 200
+2026-10-25 16:50:39,820 INFO jawiverse-api Request: POST http://127.0.0.1:8000/transliterate
+2026-10-25 16:50:39,821 ERROR asyncio Task was destroyed but it is pending!
+task: <Task pending name='Task-9' coro=<<async_generator_athrow without __name__>()>>
+2026-10-25 16:52:19,663 INFO jawiverse-api Request: POST http://127.0.0.1:8000/transliterate
+2026-10-25 16:52:19,667 INFO jawiverse-api Transliteration requested: model=rumi2jawi, text=Cinta sejati
+2026-10-25 16:52:21,713 INFO jawiverse-api Transliteration result: چينتا سجاتي | elapsed_ms=2045.1
+2026-10-25 16:52:21,714 INFO jawiverse-api Response status: 200 | elapsed_ms=2049.96
+2026-10-25 16:53:24,187 INFO jawiverse-api Request: OPTIONS http://localhost:8000/transliterate
+2026-10-25 16:53:24,188 INFO jawiverse-api Response status: 200 | elapsed_ms=0.59
+2026-10-25 16:53:24,191 INFO jawiverse-api Request: POST http://localhost:8000/transliterate
+2026-10-25 16:53:24,192 INFO jawiverse-api Transliteration requested: model=jawi2rumi, text=سايڠكو
+2026-10-25 16:53:24,526 INFO jawiverse-api Transliteration result: sayangku | elapsed_ms=334.81
+2026-10-25 16:53:24,528 INFO jawiverse-api Response status: 200 | elapsed_ms=337.29
+2026-10-25 16:53:36,030 INFO jawiverse-api Request: POST http://localhost:8000/transliterate
+2026-10-25 16:53:36,030 INFO jawiverse-api Transliteration requested: model=jawi2rumi, text=sayangku
+2026-10-25 16:53:36,424 INFO jawiverse-api Transliteration result: sayangku | elapsed_ms=392.25
+2026-10-25 16:53:36,424 INFO jawiverse-api Response status: 200 | elapsed_ms=394.93
+2026-10-25 16:53:40,801 INFO jawiverse-api Request: POST http://localhost:8000/transliterate
+2026-10-25 16:53:40,803 INFO jawiverse-api Transliteration requested: model=rumi2jawi, text=sayangku
+2026-10-25 16:53:41,299 INFO jawiverse-api Transliteration result: سايڠكو | elapsed_ms=496.38
+2026-10-25 16:53:41,300 INFO jawiverse-api Response status: 200 | elapsed_ms=499.05
+2026-10-25 16:55:21,188 INFO jawiverse-api Request: POST http://localhost:8000/transliterate
+2026-10-25 16:55:21,189 INFO jawiverse-api Transliteration requested: model=jawi2rumi, text=نيرناما ݢارو تلور
+2026-10-25 16:55:21,828 INFO jawiverse-api Transliteration result: nirnama  gearu telur | elapsed_ms=638.15
+2026-10-25 16:55:21,829 INFO jawiverse-api Response status: 200 | elapsed_ms=640.8
+2026-10-25 16:55:44,598 INFO jawiverse-api Request: POST http://localhost:8000/transliterate
+2026-10-25 16:55:44,600 INFO jawiverse-api Transliteration requested: model=rumi2jawi, text=nirnama garu telur ijat
+2026-10-25 16:55:45,598 INFO jawiverse-api Transliteration result: نيرنام ڬارو تلور ايحت | elapsed_ms=998.16
+2026-10-25 16:55:45,599 INFO jawiverse-api Response status: 200 | elapsed_ms=1000.81
+2026-10-25 16:56:03,382 INFO jawiverse-api Request: POST http://localhost:8000/transliterate
+2026-10-25 16:56:03,383 INFO jawiverse-api Transliteration requested: model=rumi2jawi, text=ijat
+2026-10-25 16:56:03,683 INFO jawiverse-api Transliteration result: إيحت | elapsed_ms=299.37
+2026-10-25 16:56:03,684 INFO jawiverse-api Response status: 200 | elapsed_ms=301.77
+2026-10-25 16:56:15,592 INFO jawiverse-api Request: POST http://localhost:8000/transliterate
+2026-10-25 16:56:15,594 INFO jawiverse-api Transliteration requested: model=jawi2rumi, text=إيحت
+2026-10-25 16:56:15,867 INFO jawiverse-api Transliteration result: eht | elapsed_ms=273.35
+2026-10-25 16:56:15,868 INFO jawiverse-api Response status: 200 | elapsed_ms=276.01

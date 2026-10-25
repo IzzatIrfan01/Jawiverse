@@ -18,7 +18,7 @@ unsloth
 unsloth_zoo
 bitsandbytes
 accelerate
-triton
+# triton enabled for faster 4-bit training, but not required. If you have a compatible GPU, install it separately:
 trl==0.22.2
 sentencepiece
 protobuf
