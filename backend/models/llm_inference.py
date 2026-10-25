@@ -1,59 +1,56 @@
-import torch
-from peft import AutoPeftModelForCausalLM
-from transformers import AutoTokenizer
 import os
+import sys
+import threading
+from pathlib import Path
 
-# Suppress warnings
-torch._dynamo.config.suppress_errors = True
+# Reuse the loader/prompt logic from jawiverse_server so the API formats
+# prompts exactly like training did (system prompt + Llama chat template),
+# and loads correctly on both GPU (Unsloth 4-bit) and CPU (fp32).
+JAWIVERSE_SERVER_DIR = Path(__file__).resolve().parents[2] / "jawiverse_server"
+sys.path.insert(0, str(JAWIVERSE_SERVER_DIR))
+
+from common import resolve_device  # noqa: E402
+from infer_jawi_rumi import DIRECTIONS, load_model, transliterate  # noqa: E402
+
+# Config via environment variables (all optional)
+MODEL_PATH = os.environ.get("JAWIVERSE_MODEL_PATH", str(JAWIVERSE_SERVER_DIR / "nirnama" / "v1" / "final"))
+DEVICE = os.environ.get("JAWIVERSE_DEVICE", "auto")  # auto, cuda, or cpu
+GPU_ID = os.environ.get("JAWIVERSE_GPU_ID")          # physical GPU index, as in nvidia-smi
+MAX_NEW_TOKENS = int(os.environ.get("JAWIVERSE_MAX_NEW_TOKENS", "512"))
+
 
 class JawirumInference:
-    def __init__(self, model_path="jawirumi_v1_model"):
-        # Get the model path relative to backend folder
-        model_path = os.path.join(os.path.dirname(__file__), "../../", model_path)
-        
-        print("[LLM] Loading model...")
-        self.model = AutoPeftModelForCausalLM.from_pretrained(
-            model_path,
-            device_map="auto",
-            dtype=torch.float16,
-        )
-        self.tokenizer = AutoTokenizer.from_pretrained(model_path)
+    def __init__(self, model_path=MODEL_PATH, device=DEVICE):
+        if GPU_ID is not None:
+            os.environ["CUDA_VISIBLE_DEVICES"] = GPU_ID
+        self.device = resolve_device(device)
+
+        print(f"[LLM] Loading model from {model_path} on {self.device}...")
+        self.model, self.tokenizer = load_model(Path(model_path), self.device)
+        # One model instance is shared by all requests; generate one at a time
+        self._lock = threading.Lock()
         print("[LLM] Model loaded!")
-    
+
     def transliterate(self, text: str, mode: str) -> str:
         """
         Translate Jawi ↔ Rumi using LLM
-        
+
         Args:
             text: Input text
             mode: 'jawi2rumi' or 'rumi2jawi'
-        
+
         Returns:
             Translated text
         """
-        # Format prompt based on mode
-        if mode == "jawi2rumi":
-            prompt = f"<jawi2rumi> {text}"
-        elif mode == "rumi2jawi":
-            prompt = f"<rumi2jawi> {text}"
-        else:
+        if mode not in DIRECTIONS:
             raise ValueError(f"Invalid mode: {mode}")
-        
-        # Tokenize
-        input_ids = self.tokenizer(prompt, return_tensors="pt")
-        
-        # Generate
-        with torch.no_grad():
-            outputs = self.model.generate(
-                input_ids["input_ids"].to(self.model.device),
-                attention_mask=input_ids["attention_mask"].to(self.model.device),
-                max_new_tokens=128,
-                do_sample=False,
+
+        # Greedy decoding (temperature 0): same input always gives the same output
+        with self._lock:
+            return transliterate(
+                self.model, self.tokenizer, text, mode,
+                max_new_tokens=MAX_NEW_TOKENS, temperature=0.0,
             )
-        
-        # Decode and return
-        result = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
-        return result
 
 # Load once at startup
 inferencer = JawirumInference()
