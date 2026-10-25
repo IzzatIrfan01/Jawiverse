@@ -27,5 +27,6 @@ huggingface_hub>=0.34.0
 
 # --- Evaluation mode only (infer_jawi_rumi.py --eval-xlsx) ---
 evaluate
+sacrebleu   # needed by evaluate's "chrf" metric
 jiwer
 tqdm

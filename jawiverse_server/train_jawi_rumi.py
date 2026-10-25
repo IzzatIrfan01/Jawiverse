@@ -50,7 +50,8 @@ from common import full_precision_base_name, load_dotenv_file, read_base_model_n
 DATASETS = {
     "nirnama": {
         "folder": "nirnama",
-        "files": [("jawi_rumi_v1.xlsx", False, False), ("jawi_rumi_parallel_v1.xlsx", False, False)],
+        # Holdout off by default so v1 is reproducible; enable with --eval-holdout-ratio
+        "files": [("jawi_rumi_v1.xlsx", True, False), ("jawi_rumi_parallel_v1.xlsx", True, False)],
         "json": "bitransliteration_nirmala_model_v1.json",
         "eval_holdout_ratio": 0.0,
         "train_max_seq_length": 256,

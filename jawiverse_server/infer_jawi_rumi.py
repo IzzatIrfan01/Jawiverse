@@ -258,16 +258,18 @@ def evaluate_xlsx(model, tokenizer, file_path: str, direction: str,
             })
 
         comparison_df = pd.DataFrame(rows)
+
+        # Save predictions before scoring, so a metrics failure doesn't lose the generation run
+        if save_results:
+            out_path = f"results_{sheet}_{direction}.csv"
+            comparison_df.to_csv(out_path, index=False)
+            print(f"Saved detailed results to: {out_path}")
+
         metrics = compute_metrics(comparison_df["Predicted"].tolist(), comparison_df["Actual"].tolist())
         results_summary.append({"Sheet": sheet, "Samples": len(sample_df), **metrics})
 
         print(f"Sample predictions from '{sheet}':")
         print(comparison_df.head(preview_rows).to_string(index=False))
-
-        if save_results:
-            out_path = f"results_{sheet}_{direction}.csv"
-            comparison_df.to_csv(out_path, index=False)
-            print(f"Saved detailed results to: {out_path}")
 
     summary_df = pd.DataFrame(results_summary)
     print("\nOverall evaluation summary:")
