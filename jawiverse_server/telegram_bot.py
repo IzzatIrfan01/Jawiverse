@@ -20,6 +20,10 @@ Setup:
 
 Run:
     python telegram_bot.py --gpu-id 1
+    python telegram_bot.py --gpu-id 1 --model risalah      # newest Risalah version
+    python telegram_bot.py --gpu-id 1 --model risalah:v1   # a specific version
+
+Set JAWIVERSE_MODEL in .env to change the default model (nirnama otherwise).
 
 By default only the chat ID in TG_CHAT_ID (from .env) is allowed to talk to
 the bot, so a leaked bot username can't be used by strangers to run
@@ -35,7 +39,7 @@ from pathlib import Path
 
 import torch
 
-from common import load_dotenv_file, resolve_device
+from common import load_dotenv_file, resolve_device, resolve_model
 from infer_jawi_rumi import DIRECTIONS, load_model, transliterate
 
 API_BASE = "https://api.telegram.org/bot{token}/{method}"
@@ -58,8 +62,8 @@ def detect_direction(text: str) -> str:
 
 
 def describe_model_path(model_path: Path, base_dir: Path) -> str:
-    """Human-readable model label built from the path, e.g. 'nirnama (final)' or
-    'nirnama (checkpoint-4072)' for .../nirnama/v1/final or
+    """Human-readable model label built from the path, e.g. 'nirnama v1 (final)' or
+    'nirnama v1 (checkpoint-4072)' for .../nirnama/v1/final or
     .../nirnama/v1/checkpoints/checkpoint-4072 -- instead of just the trailing
     directory name ('final', which is the same for every dataset)."""
     model_path = model_path.resolve()
@@ -71,6 +75,8 @@ def describe_model_path(model_path: Path, base_dir: Path) -> str:
         rel_parts = None
 
     dataset_name = rel_parts[0] if rel_parts and len(rel_parts) > 1 else model_path.parent.name
+    if rel_parts and len(rel_parts) > 2:
+        dataset_name = f"{dataset_name} {rel_parts[1]}"
 
     if not dataset_name or dataset_name == leaf:
         return leaf
@@ -199,9 +205,11 @@ def poll_loop(token: str, model, tokenizer, args, allowed_chat_ids):
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Telegram chat interface for the Jawi<->Rumi model")
-    parser.add_argument("--model-path", type=Path,
-                         default=Path(__file__).resolve().parent / "nirnama" / "v1" / "final",
-                         help="Path to the trained adapter directory")
+    parser.add_argument("--model", default=os.environ.get("JAWIVERSE_MODEL", "nirnama"),
+                         help="Model name, newest version unless given, e.g. 'risalah' or 'risalah:v1' "
+                              "(default: $JAWIVERSE_MODEL, else nirnama)")
+    parser.add_argument("--model-path", type=Path, default=None,
+                         help="Exact adapter/checkpoint directory; overrides --model")
     parser.add_argument("--device", choices=["auto", "cuda", "cpu"], default="auto")
     parser.add_argument("--gpu-id", type=int, default=None,
                          help="Physical GPU index to use (as shown in nvidia-smi). Ignored when --device cpu.")
@@ -245,11 +253,12 @@ def main():
     device = resolve_device(args.device)
     print(f"Using device: {device}")
 
-    print(f"Loading model from {args.model_path} ...")
-    model, tokenizer = load_model(args.model_path, device, args.max_seq_length)
+    model_path = args.model_path or resolve_model(args.model, base_dir)
+    print(f"Loading model from {model_path} ...")
+    model, tokenizer = load_model(model_path, device, args.max_seq_length)
 
     device_name = get_device_name(device)
-    model_label = describe_model_path(args.model_path, base_dir)
+    model_label = describe_model_path(model_path, base_dir)
     startup_msg = (
         f"🤖 Jawiverse bot online\n"
         f"Device: {device.upper()} ({device_name})\n"

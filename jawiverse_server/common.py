@@ -4,9 +4,12 @@ copy-pasted across all three standalone scripts.
 """
 import json
 import os
+import re
 from pathlib import Path
 
 import torch
+
+VERSION_DIR_RE = re.compile(r"^v(\d+)$")
 
 
 def load_dotenv_file(path: Path):
@@ -38,6 +41,56 @@ def resolve_device(requested: str) -> str:
         print("CUDA requested but not available; falling back to CPU.")
         device = "cpu"
     return device
+
+
+def list_models(base_dir: Path) -> dict:
+    """Map each dataset folder to its trained versions, oldest first, e.g.
+    {"nirnama": ["v1"], "risalah kaum muslimin": ["v1", "v2"]}. A version only
+    counts once training finished, i.e. it has final/adapter_config.json."""
+    models = {}
+    for folder in sorted(d for d in base_dir.iterdir() if d.is_dir()):
+        versions = [d for d in folder.iterdir()
+                    if VERSION_DIR_RE.match(d.name) and (d / "final" / "adapter_config.json").exists()]
+        if versions:
+            models[folder.name] = [d.name for d in sorted(versions, key=lambda d: int(d.name[1:]))]
+    return models
+
+
+def format_models(base_dir: Path) -> str:
+    models = list_models(base_dir)
+    if not models:
+        return "  (no trained models found)"
+    return "\n".join(f"  {name}: {', '.join(versions)}" for name, versions in models.items())
+
+
+def resolve_model(spec: str, base_dir: Path) -> Path:
+    """Turn a --model value into an adapter directory.
+
+    "risalah" -> newest version of the dataset folder starting with "risalah"
+    (so "risalah kaum muslimin/vN/final"); "risalah:v1" or "risalah:1" -> that
+    version. Anything that is already an adapter directory is used as-is, so
+    a checkpoint path still works.
+    """
+    for candidate in (Path(spec), base_dir / spec):
+        if (candidate / "adapter_config.json").exists():
+            return candidate
+
+    name, _, version = spec.partition(":")
+    models = list_models(base_dir)
+    matches = [folder for folder in models if folder.lower() == name.lower()] or \
+              [folder for folder in models if folder.lower().startswith(name.lower())]
+    if len(matches) != 1:
+        problem = "matches several models" if matches else "matches no trained model"
+        raise SystemExit(f"--model '{spec}' {problem}. Available:\n{format_models(base_dir)}")
+    folder = matches[0]
+
+    if not version:
+        version = models[folder][-1]
+    elif not version.startswith("v"):
+        version = f"v{version}"
+    if version not in models[folder]:
+        raise SystemExit(f"'{folder}' has no trained {version}. Available:\n{format_models(base_dir)}")
+    return base_dir / folder / version / "final"
 
 
 def read_base_model_name(model_path: Path) -> str:

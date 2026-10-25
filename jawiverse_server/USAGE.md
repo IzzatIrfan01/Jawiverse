@@ -122,9 +122,16 @@ python train_jawi_rumi.py
 
 ## 3. Inference — `infer_jawi_rumi.py`
 
-Loads the adapter from `--model-path` (default `nirnama/v1/final`). The base model name is read automatically from the adapter's own `adapter_config.json`, so you don't need to specify it separately.
+Pick the model with `--model`: a dataset folder name (a prefix is enough), newest trained version unless you name one. The base model name is read automatically from the adapter's own `adapter_config.json`, so you don't need to specify it separately.
+```bash
+python infer_jawi_rumi.py --list-models                       # what's trained, e.g. "risalah kaum muslimin: v1, v2"
+python infer_jawi_rumi.py --model risalah --interactive       # newest Risalah version
+python infer_jawi_rumi.py --model risalah:v1 --interactive    # a specific version
+python infer_jawi_rumi.py --model-path "risalah kaum muslimin/v1/checkpoints/checkpoint-2036" --interactive
+```
+Without `--model`/`--model-path` it uses `$JAWIVERSE_MODEL`, else the newest `nirnama`. A version only shows up once training finished (it has `final/adapter_config.json`), so a run in progress is never picked as "newest".
 
-Exactly one of four modes is required per run: `--prompt`, `--interactive`, `--input-file`, or `--eval-xlsx`.
+Exactly one of five modes is required per run: `--prompt`, `--interactive`, `--input-file`, `--eval-xlsx`, or `--list-models`.
 
 ### Mode 1 — Single prompt
 ```bash
@@ -162,7 +169,8 @@ python infer_jawi_rumi.py --eval-xlsx "risalah kaum muslimin/dataset/Risalah Unt
 |---|---|---|
 | `--device` | `auto` | `cuda`, `cpu`, or `auto` |
 | `--gpu-id` | none | Physical GPU index |
-| `--model-path` | `nirnama/v1/final` | Adapter directory (or a specific checkpoint dir) |
+| `--model` | `$JAWIVERSE_MODEL`, else `nirnama` | `name` (newest version) or `name:vN` |
+| `--model-path` | none | Exact adapter or checkpoint dir; overrides `--model` |
 | `--direction` | `jawi2rumi` | or `rumi2jawi` |
 | `--max-new-tokens` | `128` | |
 | `--temperature` | `0.1` | `0` = greedy |
@@ -196,8 +204,9 @@ Once loaded, it prints the device to the terminal **and** sends a startup messag
 ```
 🤖 Jawiverse bot online
 Device: CUDA (NVIDIA GeForce RTX 3090)
-Model: final
+Model: nirnama v1 (final)
 ```
+Add `--model risalah` (or set `JAWIVERSE_MODEL=risalah` in `.env`) to serve a different model.
 That message is your confirmation the bot is up and which device/GPU it's actually running on — check for it on your phone before you start testing.
 
 **3. Open Telegram on your phone**, go to your chat with the bot, and just send it text:
@@ -233,7 +242,8 @@ python telegram_bot.py --gpu-id 1
 
 | Flag | Default | Notes |
 |---|---|---|
-| `--model-path` | `nirnama/v1/final` | Adapter directory |
+| `--model` | `$JAWIVERSE_MODEL`, else `nirnama` | `name` (newest version) or `name:vN` |
+| `--model-path` | none | Exact adapter or checkpoint dir; overrides `--model` |
 | `--device` / `--gpu-id` | `auto` / none | Same as the other scripts |
 | `--max-new-tokens` / `--temperature` / `--min-p` | `128` / `0.1` / `0.1` | Generation params |
 | `--allow-all` | off | Respond to any chat, ignoring the allowlist |

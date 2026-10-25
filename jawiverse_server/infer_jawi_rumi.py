@@ -9,10 +9,18 @@ Standalone replacement for TestingModel.ipynb. Auto-detects CUDA vs CPU:
           import time). Slower, but works anywhere.
 
 The base model is read automatically from the adapter's own
-adapter_config.json ("base_model_name_or_path"), so you only need to point
---model-path at the trained adapter directory (e.g. nirnama/v1/final).
+adapter_config.json ("base_model_name_or_path"), so you only need to pick
+the trained adapter: --model risalah (newest version), --model risalah:v1
+(a specific one), or --model-path for any adapter/checkpoint directory.
+Without either, it uses $JAWIVERSE_MODEL, else the newest nirnama.
 
 Examples:
+    # See which models / versions are trained
+    python infer_jawi_rumi.py --list-models
+
+    # Newest Risalah model
+    python infer_jawi_rumi.py --model risalah --prompt "چينتا سجاتي"
+
     # Single prompt, GPU
     python infer_jawi_rumi.py --prompt "چينتا سجاتي" --direction jawi2rumi
 
@@ -37,7 +45,9 @@ from pathlib import Path
 
 import torch
 
-from common import full_precision_base_name, read_base_model_name, resolve_device
+from common import format_models, full_precision_base_name, read_base_model_name, resolve_device, resolve_model
+
+BASE_DIR = Path(__file__).resolve().parent
 
 DIRECTIONS = ("jawi2rumi", "rumi2jawi")
 
@@ -285,9 +295,11 @@ def evaluate_xlsx(model, tokenizer, file_path: str, direction: str,
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Run / evaluate the Jawi<->Rumi transliteration model")
-    parser.add_argument("--model-path", type=Path,
-                         default=Path(__file__).resolve().parent / "nirnama" / "v1" / "final",
-                         help="Path to the trained adapter directory")
+    parser.add_argument("--model", default=os.environ.get("JAWIVERSE_MODEL", "nirnama"),
+                         help="Model name, newest version unless given, e.g. 'risalah' or 'risalah:v1' "
+                              "(default: $JAWIVERSE_MODEL, else nirnama)")
+    parser.add_argument("--model-path", type=Path, default=None,
+                         help="Exact adapter/checkpoint directory; overrides --model")
     parser.add_argument("--device", choices=["auto", "cuda", "cpu"], default="auto")
     parser.add_argument("--gpu-id", type=int, default=None,
                          help="Physical GPU index to use (as shown in nvidia-smi). Ignored when --device cpu.")
@@ -304,6 +316,7 @@ def parse_args():
                        help="Batch inference from a .txt (one input per line), .json, .csv, or .xlsx file "
                             "(no ground truth needed)")
     mode.add_argument("--eval-xlsx", type=str, help="Path to an Excel file with ground truth to evaluate against")
+    mode.add_argument("--list-models", action="store_true", help="List trained models and versions, then exit")
 
     parser.add_argument("--input-column", type=str, default="Input",
                          help="Column/key name to read inputs from for .json/.csv/.xlsx --input-file")
@@ -322,6 +335,13 @@ def parse_args():
 def main():
     args = parse_args()
 
+    if args.list_models:
+        print(f"Trained models (use --model <name> or <name>:vN):\n{format_models(BASE_DIR)}")
+        return
+
+    model_path = args.model_path or resolve_model(args.model, BASE_DIR)
+    print(f"Model: {model_path}")
+
     if args.gpu_id is not None:
         os.environ["CUDA_VISIBLE_DEVICES"] = str(args.gpu_id)
 
@@ -331,7 +351,7 @@ def main():
         gpu = torch.cuda.get_device_properties(0)
         print(f"GPU: {gpu.name} | VRAM: {round(gpu.total_memory / 1024 ** 3, 2)} GB")
 
-    model, tokenizer = load_model(args.model_path, device, args.max_seq_length)
+    model, tokenizer = load_model(model_path, device, args.max_seq_length)
 
     if args.prompt is not None:
         result = transliterate(
