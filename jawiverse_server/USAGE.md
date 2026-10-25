@@ -80,6 +80,32 @@ There's no Colab-style "segmented" training here — just leave it running. If t
 | `--num-checkpoint-segments` | `5` | Roughly how many save points across the whole run |
 | `--save-total-limit` | `5` | How many checkpoints to keep on disk |
 | `--rebuild-dataset` | off | Force-regenerate the conversations JSON from the Excel files |
+| `--dataset` | `nirnama` | `nirnama` or `risalah`; also picks the output folder (`<dataset folder>/v1/`) |
+| `--init-adapter` | none | Continue fine-tuning from an existing adapter (e.g. `nirnama/v1/final`) instead of a fresh LoRA |
+| `--eval-holdout-ratio` | per dataset | Fraction of pairs kept out of training for evaluation (nirnama `0`, risalah `0.1`) |
+| `--train-max-seq-length` | per dataset | Tokens per training example; longer ones are truncated, cutting off the answer (nirnama `256`, risalah `1024`) |
+
+### Data cleaning
+When the conversations JSON is built, rows are skipped if the pair is incomplete (Jawi or Rumi empty), the Jawi is a Quran verse pasted as Quran-font glyphs, the Jawi has no Arabic-script letters, the Rumi has no Latin letters or contains Arabic script (e.g. number-only rows), or the exact pair already appeared. Counts per reason are printed, and every skipped row (file, sheet, Excel row, reason) is written to `<dataset folder>/v1/skipped_rows.csv` so you can fix the source Excel. An existing JSON is reused as-is — pass `--rebuild-dataset` to apply the cleaning to it.
+
+For Risalah, long sentence pairs are additionally split into extra clause pairs at `. ; : ! ?` (Jawi `؛ ؟` count as `; ?`), each clause keeping its own punctuation. A pair is only split when both sides break at the same sequence of marks, every clause has balanced brackets/quotes and a plausible Jawi/Rumi word ratio, and passes the checks above — otherwise it's kept whole only. Splits are made from training pairs only, never from eval holdout pairs. Currently this adds ~600 pairs.
+
+### Training on Risalah Untuk Kaum Muslimin
+```bash
+# Separate Risalah-only model (fresh LoRA, no nirnama data involved)
+python train_jawi_rumi.py --dataset risalah --gpu-id 1
+
+# Or continue from the finished nirnama model instead
+python train_jawi_rumi.py --dataset risalah --init-adapter nirnama/v1/final --gpu-id 1
+```
+Reads both files in `risalah kaum muslimin/dataset/`, writes to `risalah kaum muslimin/v1/{checkpoints,final}`. 10% of the sentence pairs (fixed seed) are kept out of training in `risalah kaum muslimin/v1/eval_holdout.xlsx` — score the result on them with:
+```bash
+python infer_jawi_rumi.py --model-path "risalah kaum muslimin/v1/final" \
+    --eval-xlsx "risalah kaum muslimin/v1/eval_holdout.xlsx" --direction jawi2rumi --n-samples 1000 \
+    --max-new-tokens 512 --save-results
+```
+(`--max-new-tokens 512` matters here: the default 128 cuts off long Risalah sentences and scores them unfairly.)
+Run the same command with `--model-path nirnama/v1/final` to compare against the nirnama-only model, and spot-check nirnama-style text too to make sure the continued model hasn't forgotten it.
 
 ### Optional Telegram progress notifications
 Set `TG_BOT_TOKEN` and `TG_CHAT_ID` to enable (never hardcode these in the script). Easiest way is a local `.env` file, auto-loaded at startup:

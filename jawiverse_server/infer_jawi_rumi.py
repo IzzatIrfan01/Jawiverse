@@ -37,7 +37,7 @@ from pathlib import Path
 
 import torch
 
-from common import resolve_device
+from common import full_precision_base_name, read_base_model_name, resolve_device
 
 DIRECTIONS = ("jawi2rumi", "rumi2jawi")
 
@@ -45,21 +45,6 @@ SYSTEM_PROMPTS = {
     "jawi2rumi": "You are an expert AI that transliterates Classical Jawi into Rumi accurately.",
     "rumi2jawi": "You are an expert AI that transliterates Rumi into Classical Jawi accurately.",
 }
-
-
-def read_base_model_name(model_path: Path) -> str:
-    adapter_config_path = model_path / "adapter_config.json"
-    if not adapter_config_path.exists():
-        raise FileNotFoundError(
-            f"No adapter_config.json found in {model_path}. "
-            "Point --model-path at the trained adapter directory (e.g. nirnama/v1/final)."
-        )
-    with open(adapter_config_path, "r", encoding="utf-8") as f:
-        config = json.load(f)
-    base_model_name = config.get("base_model_name_or_path")
-    if not base_model_name:
-        raise ValueError(f"adapter_config.json at {adapter_config_path} has no base_model_name_or_path")
-    return base_model_name
 
 
 def load_model_cuda(model_path: Path, max_seq_length: int):
@@ -81,14 +66,7 @@ def load_model_cpu(model_path: Path, max_seq_length: int):
     from peft import PeftModel
     from transformers import AutoModelForCausalLM, AutoTokenizer
 
-    base_model_name = read_base_model_name(model_path)
-    # Adapters trained with Unsloth record a pre-quantized bitsandbytes base
-    # (e.g. "...-unsloth-bnb-4bit"), which needs CUDA to load. The LoRA weights
-    # apply equally to the original full-precision model, so use that instead.
-    for suffix in ("-unsloth-bnb-4bit", "-bnb-4bit"):
-        if base_model_name.endswith(suffix):
-            base_model_name = base_model_name[:-len(suffix)]
-            break
+    base_model_name = full_precision_base_name(read_base_model_name(model_path))
     print(f"CPU inference: loading base model '{base_model_name}' + adapter '{model_path}' (fp32, no Unsloth)")
 
     tokenizer = AutoTokenizer.from_pretrained(str(model_path))
