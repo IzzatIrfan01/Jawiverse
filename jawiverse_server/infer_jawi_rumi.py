@@ -9,10 +9,18 @@ Standalone replacement for TestingModel.ipynb. Auto-detects CUDA vs CPU:
           import time). Slower, but works anywhere.
 
 The base model is read automatically from the adapter's own
-adapter_config.json ("base_model_name_or_path"), so you only need to point
---model-path at the trained adapter directory (e.g. nirnama/v1/final).
+adapter_config.json ("base_model_name_or_path"), so you only need to pick
+the trained adapter: --model risalah (newest version), --model risalah:v1
+(a specific one), or --model-path for any adapter/checkpoint directory.
+Without either, it uses $JAWIVERSE_MODEL, else the newest nirnama.
 
 Examples:
+    # See which models / versions are trained
+    python infer_jawi_rumi.py --list-models
+
+    # Newest Risalah model
+    python infer_jawi_rumi.py --model risalah --prompt "چينتا سجاتي"
+
     # Single prompt, GPU
     python infer_jawi_rumi.py --prompt "چينتا سجاتي" --direction jawi2rumi
 
@@ -38,7 +46,9 @@ from pathlib import Path
 
 import torch
 
-from common import resolve_device
+from common import format_models, full_precision_base_name, read_base_model_name, resolve_device, resolve_model
+
+BASE_DIR = Path(__file__).resolve().parent
 
 DIRECTIONS = ("jawi2rumi", "rumi2jawi")
 
@@ -46,21 +56,6 @@ SYSTEM_PROMPTS = {
     "jawi2rumi": "You are an expert AI that transliterates Classical Jawi into Rumi accurately.",
     "rumi2jawi": "You are an expert AI that transliterates Rumi into Classical Jawi accurately.",
 }
-
-
-def read_base_model_name(model_path: Path) -> str:
-    adapter_config_path = model_path / "adapter_config.json"
-    if not adapter_config_path.exists():
-        raise FileNotFoundError(
-            f"No adapter_config.json found in {model_path}. "
-            "Point --model-path at the trained adapter directory (e.g. nirnama/v1/final)."
-        )
-    with open(adapter_config_path, "r", encoding="utf-8") as f:
-        config = json.load(f)
-    base_model_name = config.get("base_model_name_or_path")
-    if not base_model_name:
-        raise ValueError(f"adapter_config.json at {adapter_config_path} has no base_model_name_or_path")
-    return base_model_name
 
 
 def load_model_cuda(model_path: Path, max_seq_length: int):
@@ -82,14 +77,7 @@ def load_model_cpu(model_path: Path, max_seq_length: int):
     from peft import PeftModel
     from transformers import AutoModelForCausalLM, AutoTokenizer
 
-    base_model_name = read_base_model_name(model_path)
-    # Adapters trained with Unsloth record a pre-quantized bitsandbytes base
-    # (e.g. "...-unsloth-bnb-4bit"), which needs CUDA to load. The LoRA weights
-    # apply equally to the original full-precision model, so use that instead.
-    for suffix in ("-unsloth-bnb-4bit", "-bnb-4bit"):
-        if base_model_name.endswith(suffix):
-            base_model_name = base_model_name[:-len(suffix)]
-            break
+    base_model_name = full_precision_base_name(read_base_model_name(model_path))
     print(f"CPU inference: loading base model '{base_model_name}' + adapter '{model_path}' (fp32, no Unsloth)")
 
     tokenizer = AutoTokenizer.from_pretrained(str(model_path))
@@ -286,16 +274,18 @@ def evaluate_xlsx(model, tokenizer, file_path: str, direction: str,
             })
 
         comparison_df = pd.DataFrame(rows)
+
+        # Save predictions before scoring, so a metrics failure doesn't lose the generation run
+        if save_results:
+            out_path = f"results_{sheet}_{direction}.csv"
+            comparison_df.to_csv(out_path, index=False)
+            print(f"Saved detailed results to: {out_path}")
+
         metrics = compute_metrics(comparison_df["Predicted"].tolist(), comparison_df["Actual"].tolist())
         results_summary.append({"Sheet": sheet, "Samples": len(sample_df), **metrics})
 
         print(f"Sample predictions from '{sheet}':")
         print(comparison_df.head(preview_rows).to_string(index=False))
-
-        if save_results:
-            out_path = f"results_{sheet}_{direction}.csv"
-            comparison_df.to_csv(out_path, index=False)
-            print(f"Saved detailed results to: {out_path}")
 
     summary_df = pd.DataFrame(results_summary)
     print("\nOverall evaluation summary:")
@@ -311,9 +301,11 @@ def evaluate_xlsx(model, tokenizer, file_path: str, direction: str,
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Run / evaluate the Jawi<->Rumi transliteration model")
-    parser.add_argument("--model-path", type=Path,
-                         default=Path(__file__).resolve().parent / "nirnama" / "v1" / "final",
-                         help="Path to the trained adapter directory")
+    parser.add_argument("--model", default=os.environ.get("JAWIVERSE_MODEL", "nirnama"),
+                         help="Model name, newest version unless given, e.g. 'risalah' or 'risalah:v1' "
+                              "(default: $JAWIVERSE_MODEL, else nirnama)")
+    parser.add_argument("--model-path", type=Path, default=None,
+                         help="Exact adapter/checkpoint directory; overrides --model")
     parser.add_argument("--device", choices=["auto", "cuda", "cpu"], default="auto")
     parser.add_argument("--gpu-id", type=int, default=None,
                          help="Physical GPU index to use (as shown in nvidia-smi). Ignored when --device cpu.")
@@ -330,6 +322,7 @@ def parse_args():
                        help="Batch inference from a .txt (one input per line), .json, .csv, or .xlsx file "
                             "(no ground truth needed)")
     mode.add_argument("--eval-xlsx", type=str, help="Path to an Excel file with ground truth to evaluate against")
+    mode.add_argument("--list-models", action="store_true", help="List trained models and versions, then exit")
 
     parser.add_argument("--input-column", type=str, default="Input",
                          help="Column/key name to read inputs from for .json/.csv/.xlsx --input-file")
@@ -348,6 +341,13 @@ def parse_args():
 def main():
     args = parse_args()
 
+    if args.list_models:
+        print(f"Trained models (use --model <name> or <name>:vN):\n{format_models(BASE_DIR)}")
+        return
+
+    model_path = args.model_path or resolve_model(args.model, BASE_DIR)
+    print(f"Model: {model_path}")
+
     if args.gpu_id is not None:
         os.environ["CUDA_VISIBLE_DEVICES"] = str(args.gpu_id)
 
@@ -357,7 +357,7 @@ def main():
         gpu = torch.cuda.get_device_properties(0)
         print(f"GPU: {gpu.name} | VRAM: {round(gpu.total_memory / 1024 ** 3, 2)} GB")
 
-    model, tokenizer = load_model(args.model_path, device, args.max_seq_length)
+    model, tokenizer = load_model(model_path, device, args.max_seq_length)
 
     if args.prompt is not None:
         result = transliterate(
