@@ -1,4 +1,5 @@
 import logging
+import os
 import sys
 import time
 from datetime import datetime
@@ -10,7 +11,7 @@ if str(BASE_DIR) not in sys.path:
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from models.llm_inference import inferencer
 
@@ -34,8 +35,15 @@ app = FastAPI(title="Jawi-Rumi Transliteration API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],   # or ["http://127.0.0.1:5500"] if using VSCode Live Server
-    allow_credentials=True,
+    allow_origins=[
+        origin.strip()
+        for origin in os.environ.get(
+            "JAWIVERSE_CORS_ORIGINS",
+            "http://localhost:3000,http://127.0.0.1:3000,http://127.0.0.1:5500",
+        ).split(",")
+        if origin.strip()
+    ],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -43,8 +51,8 @@ app.add_middleware(
 
 # Request schema
 class TransliterationRequest(BaseModel):
-    model: str   # classical2rumi, rumi2classical, modern2rumi, rumi2modern
-    text: str
+    model: str = Field(min_length=1, max_length=32)
+    text: str = Field(min_length=1, max_length=2000)
 
 
 @app.get("/health")
@@ -61,7 +69,7 @@ def health_check():
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
     start = time.perf_counter()
-    logger.info(f"Request: {request.method} {request.url}")
+    logger.info("Request: %s %s", request.method, request.url.path)
     response = await call_next(request)
     elapsed_ms = round((time.perf_counter() - start) * 1000, 2)
     logger.info(f"Response status: {response.status_code} | elapsed_ms={elapsed_ms}")
@@ -73,7 +81,7 @@ def transliterate(request: TransliterationRequest):
     model = request.model.lower()
     text = request.text
 
-    logger.info(f"Transliteration requested: model={model}, text={text}")
+    logger.info("Transliteration requested: model=%s, input_length=%d", model, len(text))
 
     # Use LLM for jawi2rumi and rumi2jawi only
     if model == "jawi2rumi":
@@ -88,5 +96,5 @@ def transliterate(request: TransliterationRequest):
         logger.error(f"Invalid model selected: {model}")
         raise HTTPException(status_code=400, detail="Invalid model selected. Use 'jawi2rumi' or 'rumi2jawi'")
 
-    logger.info(f"Transliteration result: {result} | elapsed_ms={elapsed_ms}")
+    logger.info("Transliteration completed: output_length=%d | elapsed_ms=%s", len(result), elapsed_ms)
     return {"model": model, "input": text, "output": result, "elapsed_ms": elapsed_ms}

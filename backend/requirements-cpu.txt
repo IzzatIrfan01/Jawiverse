@@ -1,0 +1,9 @@
+fastapi>=0.115,<1
+uvicorn[standard]>=0.30,<1
+transformers==4.55.4
+peft==0.17.1
+accelerate>=1,<2
+sentencepiece>=0.2
+protobuf>=3.20
+safetensors>=0.4
+huggingface_hub>=0.34,<1

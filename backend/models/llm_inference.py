@@ -24,9 +24,10 @@ class JawirumInference:
         if GPU_ID is not None:
             os.environ["CUDA_VISIBLE_DEVICES"] = GPU_ID
         self.device = resolve_device(device)
+        self.model_path = str(Path(model_path).resolve())
 
-        print(f"[LLM] Loading model from {model_path} on {self.device}...")
-        self.model, self.tokenizer = load_model(Path(model_path), self.device)
+        print(f"[LLM] Loading model from {self.model_path} on {self.device}...")
+        self.model, self.tokenizer = load_model(Path(self.model_path), self.device)
         # One model instance is shared by all requests; generate one at a time
         self._lock = threading.Lock()
         print("[LLM] Model loaded!")

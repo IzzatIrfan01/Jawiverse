@@ -273,3 +273,25 @@ task: <Task pending name='Task-9' coro=<<async_generator_athrow without __name__
 2026-10-25 16:56:15,594 INFO jawiverse-api Transliteration requested: model=jawi2rumi, text=إيحت
 2026-10-25 16:56:15,867 INFO jawiverse-api Transliteration result: eht | elapsed_ms=273.35
 2026-10-25 16:56:15,868 INFO jawiverse-api Response status: 200 | elapsed_ms=276.01
+2026-10-25 17:12:17,009 INFO jawiverse-api Request: OPTIONS http://localhost:8000/transliterate
+2026-10-25 17:12:17,011 INFO jawiverse-api Response status: 200 | elapsed_ms=0.84
+2026-10-25 17:12:17,013 INFO jawiverse-api Request: POST http://localhost:8000/transliterate
+2026-10-25 17:12:17,014 INFO jawiverse-api Transliteration requested: model=jawi2rumi, text=telurrrrrr
+2026-10-25 17:12:17,418 INFO jawiverse-api Transliteration result: telurrrrrr | elapsed_ms=404.15
+2026-10-25 17:12:17,418 INFO jawiverse-api Response status: 200 | elapsed_ms=406.44
+2026-10-25 17:12:21,049 INFO jawiverse-api Request: POST http://localhost:8000/transliterate
+2026-10-25 17:12:21,050 INFO jawiverse-api Transliteration requested: model=rumi2jawi, text=telurrrrrr
+2026-10-25 17:12:21,628 INFO jawiverse-api Transliteration result: تلورررر | elapsed_ms=576.54
+2026-10-25 17:12:21,628 INFO jawiverse-api Response status: 200 | elapsed_ms=579.26
+2026-10-25 17:12:32,348 INFO jawiverse-api Request: POST http://localhost:8000/transliterate
+2026-10-25 17:12:32,351 INFO jawiverse-api Transliteration requested: model=rumi2jawi, text=sayangkuuukuuukuuu
+2026-10-25 17:12:33,670 INFO jawiverse-api Transliteration result: سايڠكوءوقاووءوقاووءوقاوو | elapsed_ms=1319.9
+2026-10-25 17:12:33,671 INFO jawiverse-api Response status: 200 | elapsed_ms=1322.64
+2026-10-25 17:12:42,311 INFO jawiverse-api Request: POST http://localhost:8000/transliterate
+2026-10-25 17:12:42,312 INFO jawiverse-api Transliteration requested: model=rumi2jawi, text=sayangku
+2026-10-25 17:12:42,750 INFO jawiverse-api Transliteration result: سايڠكو | elapsed_ms=437.95
+2026-10-25 17:12:42,751 INFO jawiverse-api Response status: 200 | elapsed_ms=440.42
+2026-10-25 17:12:55,898 INFO jawiverse-api Request: POST http://localhost:8000/transliterate
+2026-10-25 17:12:55,899 INFO jawiverse-api Transliteration requested: model=rumi2jawi, text=yang tersebut
+2026-10-25 17:12:56,459 INFO jawiverse-api Transliteration result: يڠ ترسبوت | elapsed_ms=559.54
+2026-10-25 17:12:56,460 INFO jawiverse-api Response status: 200 | elapsed_ms=562.23
