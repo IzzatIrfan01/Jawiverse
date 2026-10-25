@@ -115,7 +115,9 @@ const handleSampleText = () => {
 const handleTransliterate = async () => {
   setIsLoading(true);
   try {
-    const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:8000";
+    // Unset: a production build is served by the backend itself (same origin), dev talks to a local backend
+    const apiUrl = process.env.REACT_APP_API_URL
+      ?? (process.env.NODE_ENV === "production" ? "" : "http://localhost:8000");
     const response = await fetch(`${apiUrl.replace(/\/$/, '')}/transliterate`, {
       method: "POST",
       headers: {

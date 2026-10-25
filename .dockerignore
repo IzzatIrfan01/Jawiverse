@@ -14,7 +14,8 @@ unsloth_compiled_cache
 **/dataset
 **/*.ipynb
 frontend
-react-frontend
+**/node_modules
+react-frontend/build
 jawirumi_v1_model
 TestingModel.ipynb
 Llama3_2_(3B)_Jawiverse.ipynb

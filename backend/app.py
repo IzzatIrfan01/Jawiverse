@@ -11,11 +11,14 @@ if str(BASE_DIR) not in sys.path:
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from models.llm_inference import inferencer
 
 LOG_PATH = BASE_DIR / "jawiverse.log"
+# React production build (npm run build); served at / when present, e.g. in the Docker image
+FRONTEND_DIR = Path(os.environ.get("JAWIVERSE_FRONTEND_DIR", BASE_DIR.parent / "react-frontend" / "build"))
 
 # Setup logging to both console and file
 logging.basicConfig(
@@ -98,3 +101,9 @@ def transliterate(request: TransliterationRequest):
 
     logger.info("Transliteration completed: output_length=%d | elapsed_ms=%s", len(result), elapsed_ms)
     return {"model": model, "input": text, "output": result, "elapsed_ms": elapsed_ms}
+
+
+# Mounted last so /health, /transliterate and /docs keep priority over the static files
+if FRONTEND_DIR.is_dir():
+    app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")
+    logger.info("Serving frontend from %s", FRONTEND_DIR)
