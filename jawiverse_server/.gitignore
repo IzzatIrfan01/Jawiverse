@@ -2,5 +2,6 @@
 .venv/
 __pycache__/
 unsloth_compiled_cache/
-*/v1/checkpoints/
-*.filepart
+**/checkpoints/
+*/dataset/
+env_jawi/
