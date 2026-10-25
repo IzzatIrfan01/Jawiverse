@@ -12,7 +12,7 @@ pip install -r jawiverse_server/requirements.txt fastapi uvicorn
 CPU only (no Unsloth/bitsandbytes needed; first run downloads the ~6.4 GB base model,
 needs ~13 GB RAM, a few seconds per request):
 pip install torch --index-url https://download.pytorch.org/whl/cpu
-pip install transformers==4.55.4 peft accelerate sentencepiece protobuf fastapi uvicorn
+pip install -r backend/requirements-cpu.txt
 
 Run
 cd backend
@@ -23,6 +23,18 @@ JAWIVERSE_DEVICE=auto|cuda|cpu      (default auto)
 JAWIVERSE_GPU_ID=1                  (physical GPU index from nvidia-smi)
 JAWIVERSE_MODEL_PATH=...            (default ../jawiverse_server/nirnama/v1/final)
 JAWIVERSE_MAX_NEW_TOKENS=512
+JAWIVERSE_CORS_ORIGINS=...          (comma-separated frontend origins; defaults to local dev origins)
+
+Hugging Face Docker Space
+The repository root contains the Space Dockerfile and metadata. Select Docker when
+creating the Space, then deploy the repository. The container runs on port 7860,
+uses CPU inference, and downloads the base model into the Space cache at startup.
+Set `JAWIVERSE_CORS_ORIGINS` in Space Variables to the exact deployed frontend origin.
+CPU Basic provides 16 GB RAM; model loading may be close to that limit and CPU
+inference is slow. Check the Space logs and `/health` before connecting the frontend.
+
+For the React production build, set `REACT_APP_API_URL` to the Space HTTPS origin
+(without `/transliterate`). Leave it unset for local development.
 
 Endpoint: POST /transliterate  ->  {"model": ..., "input": ..., "output": ...}
 

@@ -41,6 +41,7 @@ Examples:
 import argparse
 import json
 import os
+import time
 from pathlib import Path
 
 import torch
@@ -98,6 +99,8 @@ def transliterate(model, tokenizer, prompt: str, direction: str,
     if direction not in DIRECTIONS:
         raise ValueError(f"direction must be one of {DIRECTIONS}, got {direction!r}")
 
+    start_time = time.perf_counter()
+
     messages = [
         {"role": "system", "content": SYSTEM_PROMPTS[direction]},
         {"role": "user", "content": f"<{direction}> {prompt}"},
@@ -130,8 +133,11 @@ def transliterate(model, tokenizer, prompt: str, direction: str,
         )
 
     generated = tokenizer.decode(outputs[0][inputs.shape[-1]:], skip_special_tokens=True)
-    return generated.strip()
+    result = generated.strip()
 
+    elapsed = time.perf_counter() - start_time
+    print(f"[Inference time] direction={direction} | total={elapsed:.2f}s")
+    return result
 
 def read_inputs_from_file(path: str, input_column: str = "Input") -> list:
     file_path = Path(path)

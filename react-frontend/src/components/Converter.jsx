@@ -10,7 +10,7 @@ import {
 const Converter = ({ currentLang }) => {
   const [inputText, setInputText] = useState('');
   const [outputText, setOutputText] = useState('');
-  const [currentMode, setCurrentMode] = useState('old-jawi-roman');
+  const [currentMode, setCurrentMode] = useState('jawi2rumi');
   const [isLoading, setIsLoading] = useState(false);
 
   const translations = {
@@ -56,7 +56,7 @@ const modes = [
 ];
 
   const getInputPlaceholder = () => {
-    if (currentMode.includes('jawi-')) {
+    if (currentMode === 'jawi2rumi') {
       return currentLang === 'en' 
         ? "Enter Jawi text here..."
         : "Masukkan teks Jawi di sini...";
@@ -115,7 +115,8 @@ const handleSampleText = () => {
 const handleTransliterate = async () => {
   setIsLoading(true);
   try {
-    const response = await fetch("http://localhost:8000/transliterate", {
+    const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:8000";
+    const response = await fetch(`${apiUrl.replace(/\/$/, '')}/transliterate`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -3,3 +3,6 @@ __pycache__
 jawirumi_v1_model/tokenizer.json
 jawirumi_v1_model/optimizer.pt
 jawirumi_v1_model/adapter_model.safetensors
+backend/unsloth_compiled_cache
+backend/jawiverse.log
+unsloth_compiled_cache
